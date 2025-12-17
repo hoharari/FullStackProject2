@@ -1,0 +1,247 @@
+/* =========================
+   DASHBOARD – BASE
+========================= */
+
+.dashboard {
+    text-align: center;
+    font-family: 'IBM Plex Sans Hebrew', sans-serif;
+    padding: 50px 20px 80px;
+    min-height: 90vh;
+    color: white;
+}
+
+/* =========================
+   TITLES
+========================= */
+
+.dash-title {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.choose-game {
+    margin: 40px 0 20px;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* =========================
+   PROFILE PANEL
+========================= */
+
+.user-panel {
+    position: fixed;
+    top: 90px;
+    right: 25px;
+    z-index: 1000;
+    text-align: right;
+}
+
+/* כפתור פרופיל */
+.profile-toggle {
+    background: linear-gradient(135deg, #7a3cff, #4b00ff);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 16px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    position: absolute;
+    top: 90px;     
+    right: 24px;   
+    z-index: 1000;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.profile-toggle:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.6);
+}
+
+
+/* תוכן הפרופיל */
+.profile-content {
+    margin-top: 14px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    position: absolute;
+    border-radius: 20px;
+    padding: 18px;
+    width: 220px;
+    display: none;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+    animation: fadeSlide 0.35s ease forwards;
+}
+
+/* פתוח */
+.profile-content.active {
+    display: block;
+}
+
+.profile-content p {
+    font-size: 0.95rem;
+    margin: 6px 0;
+    opacity: 0.95;
+}
+
+.stats-btn {
+    margin-top: 14px;
+    width: 100%;
+    background: #ffffff;
+    color: #4b00ff;
+    border: none;
+    padding: 8px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* אנימציה */
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   GAMES GRID
+========================= */
+
+.games-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-auto-rows: 180px;
+    gap: 22px;
+    margin-top: 40px;
+}
+
+/* כרטיס משחק */
+.game-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease,
+        background 0.35s ease;
+}
+
+/* Hover – אחד בלבד */
+.game-card:hover {
+    transform: translateY(-8px) scale(1.05);
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45);
+}
+
+/* אפקט זוהר */
+.game-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 22px;
+    background: radial-gradient(
+        circle at top,
+        rgba(255,255,255,0.3),
+        transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.game-card:hover::after {
+    opacity: 1;
+}
+
+.game-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 22px;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+/* שכבה כהה מעל התמונה */
+.game-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.22),
+        rgba(0,0,0,0.03)
+    );
+    border-radius: 22px;
+    z-index: 1;
+}
+
+/* הטקסט מעל הכל */
+.game-card p {
+    position: relative;
+    z-index: 2;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+
+/* נעול */
+.disabled {
+    opacity: 0.35;
+    pointer-events: none;
+    filter: grayscale(100%);
+}
+
+/* גדלים מיוחדים */
+.game-card.tall {
+    grid-row: span 2;
+}
+
+.game-card.wide {
+    grid-column: span 2;
+}
+
+.game-card.big {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+    .dash-title {
+        font-size: 2.4rem;
+    }
+
+    .choose-game {
+        font-size: 1.6rem;
+    }
+
+    .user-panel {
+        right: 15px;
+        top: 80px;
+    }
+}

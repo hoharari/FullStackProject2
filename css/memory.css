@@ -1,0 +1,26 @@
+#game {
+    display: grid;
+    grid-template-columns: repeat(4, 70px);
+    gap: 10px;
+    justify-content: center;
+}
+
+.card {
+    width: 70px;
+    height: 70px;
+    background: #4a90e2;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.card.open {
+    background: #fff;
+}
+
+.back-btn {
+    display: inline-block;
+    margin: 10px;
+}

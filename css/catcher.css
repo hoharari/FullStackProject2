@@ -1,0 +1,192 @@
+/* ===== בסיס ===== */
+body {
+    margin: 0;
+     font-family: "IBM Plex Sans Hebrew", sans-serif;
+    background: linear-gradient(to bottom, #7ec8ff, #dff1ff);
+    min-height: 100vh;
+    text-align: center;
+
+     display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+/* ===== סרגל עליון ===== */
+.top-bar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px;
+}
+
+.back-btn {
+    background: rgba(255,255,255,0.7);
+    padding: 10px 16px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: #003366;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: white;
+}
+
+.title {
+    font-size: 2.3rem;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #003366;
+    margin-bottom: 10px;
+}
+
+
+/* ===== כרטיס המשחק ===== */
+.game-card {
+    background: rgba(255,255,255,0.8);
+   
+    margin: auto;
+    padding: 20px;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+
+    width: min(90vw, 520px);
+    height: 75vh; 
+    
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== אזור המשחק ===== */
+.game-area {
+  
+    flex: 1;
+    background: linear-gradient(to bottom, #bde7ff, #ffffff);
+    overflow: hidden;
+    margin-bottom: 15px;
+    position: relative;
+    height: 100%;
+    min-height: 260px;
+    max-height: 420px;
+    border-radius: 20px;
+}
+
+/* ===== הילד ===== */
+#player {
+    position: absolute;
+    bottom: 10px;
+    font-size: 42px;
+    left: 160px;
+    transition: left 0.15s;
+}
+
+/* ===== כוכבים ===== */
+.star {
+    position: absolute;
+    font-size: 28px;
+    animation: glow 1.5s infinite alternate;
+}
+.game-over {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    z-index: 1000;
+}
+
+.game-over h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.game-over button {
+    margin-top: 15px;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    background: #4aa3ff;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes glow {
+    from { filter: drop-shadow(0 0 5px gold); }
+    to   { filter: drop-shadow(0 0 15px gold); }
+}
+
+/* ===== מידע ===== */
+.info {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* ===== שליטה ===== */
+.controls {
+    display: flex;
+    justify-content: space-around;
+    direction: ltr;
+
+}
+
+.controls button {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    font-size: 28px;
+    background: #4aa3ff;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    transition: transform 0.1s;
+}
+
+.controls button:active {
+    transform: scale(0.9);
+}
+
+/* ===== מובייל ===== */
+@media (max-width: 480px) {
+    .game-card {
+        width: 90%;
+    }
+}
+
+/* ===== התאמה למסכים גדולים (מחשב) ===== */
+@media (min-width: 900px) {
+    .game-card {
+        width: 520px;
+        padding: 30px;
+    }
+
+    .game-area {
+        height: 550px;
+    }
+
+    #player {
+        font-size: 48px;
+    }
+
+    .star {
+        font-size: 34px;
+    }
+
+    .controls button {
+        width: 80px;
+        height: 80px;
+        font-size: 32px;
+    }
+}

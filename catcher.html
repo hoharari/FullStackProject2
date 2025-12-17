@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>תפוס את הכוכב ⭐</title>
+    <link rel="stylesheet" href="../css/catcher.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geom:ital,wght@0,300..900;1,300..900&family=Huninn&family=IBM+Plex+Sans+Hebrew:wght@100;200;300;400;500;600;700&family=Momo+Trust+Display&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bitcount+Prop+Single:wght@100..900&family=Geom:ital,wght@0,300..900;1,300..900&family=Huninn&family=IBM+Plex+Sans+Hebrew:wght@100;200;300;400;500;600;700&family=Momo+Trust+Display&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<header class="top-bar">
+    <a href="../dashboard.html" class="back-btn">⬅ חזרה לתפריט הראשי</a>
+</header>
+
+<h1 class="title">⭐ תפוס את הכוכב ⭐</h1>
+<p class="subtitle">עזור לילד לתפוס כמה שיותר כוכבים!</p>
+
+<div class="game-card">
+    <div class="game-area">
+        <div id="player">👦</div>
+    </div>
+
+    <div class="info">
+        ניקוד: <span id="score">0</span>
+    </div>
+
+    <div class="controls">
+        <button id="leftBtn">⬅️</button>
+        <button id="rightBtn">➡️</button>
+    </div>
+</div>
+<div id="gameOver" class="game-over hidden">
+    <h2>❌ המשחק נגמר</h2>
+    <p>לא הצלחת לתפוס מספיק כוכבים</p>
+    <button id="retryBtn">🔄 נסה שוב</button>
+    <button id="menuBtn"> לתפריט הראשי</button>
+</div>
+
+<script src="../js/catcher.js"></script>
+</body>
+</html>

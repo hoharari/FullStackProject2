@@ -1,0 +1,121 @@
+/* ============================
+      עמוד הבית – PLAYIT
+=============================== */
+
+/* ---- Hero Section ---- */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 150px 20px 200px;
+    color:  #ffffff;;
+}
+
+
+
+
+/* כותרת ראשית */
+.hero-title {
+    font-family: "Bitcount Prop Single", system-ui;
+    font-optical-sizing: auto;
+    font-variation-settings:
+    "slnt" 0,
+    "CRSV" 0.5,
+    "ELSH" 0,
+    "ELXP" 0;
+    font-size: 4rem;
+    color: #000;
+    margin-bottom: 15px;
+    text-shadow: 4px 4px 18px #4b0066;
+     letter-spacing: 4px;
+}
+
+/* תיאור משפט מתחת */
+.hero-sub {
+    font-family: 'IBM Plex Sans Hebrew', sans-serif;
+     font-size: 2rem !important;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    font-weight: bold;
+     color: white;
+}
+
+
+
+/* כפתור */
+.hero-btn {
+    font-family: 'IBM Plex Sans Hebrew', sans-serif;
+    padding: 14px 45px;
+    background: linear-gradient(to right, #8a00ff, #d000ff);
+    color: white;
+    font-size: 1.3rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+.hero-btn:hover {
+    transform: scale(1.08);
+    background: #b000e6;
+}
+.btn-container {
+    display: flex;
+    gap: 25px;
+    margin-top: 40px; 
+}
+
+
+/* ---- רספונסיביות ---- */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.8rem;
+    }
+
+    .hero-sub {
+        font-size: 1.2rem;
+    }
+
+    .hero-btn {
+        font-size: 1.1rem;
+        padding: 12px 35px;
+    }
+}
+.video-showcase {
+    padding: 40px 20px 70px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.video-showcase h2 {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+}
+
+.video-showcase p {
+    max-width: 700px;
+    margin: 0 auto 35px;
+    opacity: 0.85;
+    line-height: 1.6;
+}
+
+.video-wrapper {
+    max-width:750px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+}
+
+.video-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.video-wrapper iframe:hover {
+    transform: scale(1.02);
+    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.6);
+}

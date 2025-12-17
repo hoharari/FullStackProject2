@@ -1,0 +1,77 @@
+/* רקע כללי כמו בעמוד הבית */
+body {
+    margin: 0;
+    font-family: "IBM Plex Sans Hebrew", sans-serif;
+    background: linear-gradient(to bottom,  #2a00ff, #260066, #4d0080);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* עיצוב HEADER ו-FOOTER מיובא מ-global.css
+   ולכן לא צריך להכפיל כאן */
+
+/* כותרת העמוד */
+.auth-title {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* מיכל הטופס */
+.auth-container {
+    width: 100%;
+    max-width: 450px;
+    margin: 90px auto;
+    padding: 20px;
+}
+
+/* טופס */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-form label {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    margin-top: 6px;
+}
+
+/* כפתורים */
+.auth-btn {
+    background: linear-gradient(to right, #ff00cc, #b100ff);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.auth-btn:hover {
+    transform: scale(1.05);
+}
+
+/* לינק מעבר */
+.link {
+    text-align: center;
+    font-size: 1rem;
+}
+
+.link a {
+    color: #66d1ff;
+    font-weight: bold;
+}
