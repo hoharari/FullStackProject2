@@ -4,132 +4,124 @@
     <meta charset="UTF-8">
     <title>PLAYIT | דאשבורד</title>
 
-    <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geom:ital,wght@0,300..900;1,300..900&family=Huninn&family=IBM+Plex+Sans+Hebrew:wght@100;200;300;400;500;600;700&family=Momo+Trust+Display&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bitcount+Prop+Single:wght@100..900&family=Geom:ital,wght@0,300..900;1,300..900&family=Huninn&family=IBM+Plex+Sans+Hebrew:wght@100;200;300;400;500;600;700&family=Momo+Trust+Display&display=swap" rel="stylesheet">
 
-    <!-- CSS -->
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 
 <body>
 
-<!-- HEADER -->
-<header class="main-header">
-    <h1 class="logo">🎮 PLAYIT</h1>
-    <nav>
-        <a href="index.html">בית</a>
-        <a href="about.html">אודות</a>
-        <a href="contact.html">צור קשר</a>
-    </nav>
-</header>
-   <!-- כפתור פרופיל -->
+    <header class="main-header">
+        <h1 class="logo">🎮 PLAYIT</h1>
+    </header>
+
     <button class="profile-toggle" id="profileToggle">
         👤 הפרופיל שלי
     </button>
 
-    <!-- USER PANEL -->
     <aside class="user-panel">
-    <div class="profile-content" id="profileContent">
-        <p>שם: <span id="userName">---</span></p>
-        <p>כניסות: <span id="visits">0</span></p>
-        <p>ניקוד: <span id="score">0</span></p>
-        <p class="last-login">
-            🕒 כניסה אחרונה:<br>
-            <span id="lastLogin">---</span>
-        </p>
+        <div class="profile-content" id="profileContent">
+            <p>שם: <span id="userName">---</span></p>
+            <p>כניסות: <span id="visits">0</span></p>
+            <p>ניקוד: <span id="score">0</span></p>
+            <p class="last-login">
+                🕒 כניסה אחרונה:<br>
+                <span id="lastLogin">---</span>
+            </p>
 
-        <button class="stats-btn">📊 היסטוריית פעילות</button>
-    </div>
-<!-- DASHBOARD -->
-<main class="dashboard-layout">
-</aside>
-    <!-- GAMES -->
-    <section class="dashboard">
-        <h2 class="dash-title">🎮 המשחקים שלנו</h2>
-
-        <div class="games-container">
-
-            <div class="game-card big">
-                <span>🧠</span>
-                <p>משחק זיכרון</p>
-                <a href="memory.html"></a>
-            </div>
-
-            <div class="game-card">
-                <span>⭐</span>
-                <p>תפוס את הכוכב</p>
-                <a href="catcher.html"></a>
-            </div>
-
-
-              <!-- משחקים בפיתוח -->
-           <div class="game-card disabled">
-            <img src="files/papacupcake.jpg" alt="בקרוב">
-              <p>בקרוב</p>
+            <a href="leaderboard.html" class="stats-btn" style="text-decoration: none; display: block; text-align: center;">
+                🏆 דירוג האלופים
+            </a>
+            
+            <button id="logoutBtn" style="background: #ff4b4b; color: white; margin-top: 10px; width: 100%; padding: 8px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold;">
+                🚪 התנתק
+            </button>
         </div>
+    </aside>
 
+    <main class="dashboard-layout">
+        <section class="dashboard">
+            <h2 class="dash-title">🎮 המשחקים שלנו</h2>
 
-          
-<div class="game-card disabled">
-    <img src="files/dgektk34otlkddjfs.jpg" alt="בקרוב">
-    <p>בקרוב</p>
-</div>
-<div class="game-card disabled">
-    <img src="files/cac3561.jpg" alt="בקרוב">
-    <p>בקרוב</p>
-</div>
-<div class="game-card disabled">
-    <img src="files/53fb77e.jpg" alt="בקרוב">
-    <p>בקרוב</p>
-</div>
+            <div class="games-container">
 
-<div class="game-card disabled">
-    <img src="files/bubls2021.jpg" alt="בקרוב">
-    <p>Bubls</p>
-</div>
+                <a href="memory.html" class="game-card big active-game-card">
+                    <img src="files/zikaron.jpg" alt="משחק זיכרון" class="game-img">
+                    <p>משחק זיכרון</p>
+                </a>
 
-<div class="game-card disabled wide">
-    <img src="files/coolj342432mani.jpg" alt="בקרוב">
-    <p>בקרוב</p>
-</div>
+                <a href="catcher.html" class="game-card active-game-card">
+                    <img src="files/tfos.jpg" alt="תפוס את הכוכב" class="game-img">
+                    <p>תפוס את הכוכב</p>
+                </a>
 
-<div class="game-card disabled">
-    <img src="files/2048-merge.jpg" alt="בקרוב">
-    <p>בקרוב</p>
-</div>
-<div class="game-card disabled">
-    <img src="files/tom-runner.jpg" alt="בקרוב">
-    <p>בקרוב</p>
-</div>
+                <div class="game-card disabled">
+                    <img src="files/papacupcake.jpg" alt="בקרוב">
+                    <p>בקרוב</p>
+                </div>
 
-<div class="game-card disabled wide">
-    <img src="files/a2a1ba5.jpg" alt="בקרוב">
-    <p>בקרוב</p>
-</div>
+                <div class="game-card disabled">
+                    <img src="files/dgektk34otlkddjfs.jpg" alt="בקרוב">
+                    <p>בקרוב</p>
+                </div>
+                
+                <div class="game-card disabled">
+                    <img src="files/cac3561.jpg" alt="בקרוב">
+                    <p>בקרוב</p>
+                </div>
+                
+                <div class="game-card disabled">
+                    <img src="files/53fb77e.jpg" alt="בקרוב">
+                    <p>בקרוב</p>
+                </div>
 
-<div class="game-card disabled">
-    <img src="files/sliterrrio.jpg" alt="בקרוב">
-    <p>בקרוב</p>
-</div>
-<div class="game-card disabled">
-    <img src="files/fireee.png" alt="בקרוב">
-    <p>בקרוב</p>
-</div>
+                <div class="game-card disabled">
+                    <img src="files/bubls2021.jpg" alt="בקרוב">
+                    <p>Bubls</p>
+                </div>
 
-        </div>
-    </section>
+                <div class="game-card disabled wide">
+                    <img src="files/coolj342432mani.jpg" alt="בקרוב">
+                    <p>בקרוב</p>
+                </div>
 
-</main>
+                <div class="game-card disabled">
+                    <img src="files/2048-merge.jpg" alt="בקרוב">
+                    <p>בקרוב</p>
+                </div>
+                
+                <div class="game-card disabled">
+                    <img src="files/tom-runner.jpg" alt="בקרוב">
+                    <p>בקרוב</p>
+                </div>
 
-<!-- FOOTER -->
-<footer>
-    <p>כל הזכויות שמורות © PLAYIT 2025</p>
-</footer>
+                <div class="game-card disabled wide">
+                    <img src="files/a2a1ba5.jpg" alt="בקרוב">
+                    <p>בקרוב</p>
+                </div>
 
-<script src="js/dashboard.js"></script>
+                <div class="game-card disabled">
+                    <img src="files/sliterrrio.jpg" alt="בקרוב">
+                    <p>בקרוב</p>
+                </div>
+                
+                <div class="game-card disabled">
+                    <img src="files/fireee.png" alt="בקרוב">
+                    <p>בקרוב</p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>כל הזכויות שמורות © PLAYIT 2025</p>
+    </footer>
+
+    <script src="js/dashboard.js"></script>
 </body>
 </html>

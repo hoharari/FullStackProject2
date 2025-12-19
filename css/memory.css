@@ -1,26 +1,249 @@
-#game {
-    display: grid;
-    grid-template-columns: repeat(4, 70px);
-    gap: 10px;
-    justify-content: center;
-}
-
-.card {
-    width: 70px;
-    height: 70px;
-    background: #4a90e2;
-    font-size: 30px;
+/* =========================
+   רקע ועיצוב כללי
+========================= */
+body {
+    background: linear-gradient(135deg, #1a0b2e, #2d1b4e, #432c7a);
+    color: white;
+    font-family: 'IBM Plex Sans Hebrew', sans-serif;
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
+    overflow-x: hidden;
 }
 
-.card.open {
-    background: #fff;
+/* =========================
+   סרגל עליון
+========================= */
+.game-header {
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
 }
 
 .back-btn {
-    display: inline-block;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+}
+
+.game-title {
+    font-family: 'Geom', sans-serif;
+    font-size: 2.2rem;
+    text-shadow: 0 0 15px rgba(169, 88, 255, 0.6);
+}
+
+/* =========================
+   אזור המשחק
+========================= */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    width: 100%;
+    max-width: 800px;
+}
+
+/* לוח תוצאות */
+.stats-panel {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px 40px;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.stat-box {
+    text-align: center;
+}
+
+.stat-box .label {
+    display: block;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 2px;
+}
+
+.stat-box .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: 'Geom', sans-serif;
+    color: #4effef;
+}
+
+/* =========================
+   גריד הקלפים
+========================= */
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    perspective: 1000px; /* חובה עבור אפקט התלת מימד */
+    margin-bottom: 50px;
+}
+
+/* =========================
+   עיצוב הקלף והיפוך (Flip)
+========================= */
+.card {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+/* המיכל הפנימי שמסתובב */
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-style: preserve-3d;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* מצב "הפוך" */
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+/* עיצוב הצדדים (קדמי ואחורי) */
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* ספארי */
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    border: 2px solid rgba(255,255,255,0.1);
+}
+
+/* הצד הקדמי (המוסתר) */
+.card-front {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    font-size: 2.5rem;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* הצד האחורי (הגילוי) */
+.card-back {
+    background: white;
+    transform: rotateY(180deg);
+    font-size: 3rem;
+}
+
+/* הוספת אייקון/שאלה לצד הקדמי */
+.card-front::after {
+    content: "❓";
+    font-size: 2rem;
+    opacity: 0.5;
+}
+
+/* התאמה (Match) */
+.card.matched .card-inner {
+    box-shadow: 0 0 15px #4effef, 0 0 30px #4effef;
+}
+
+/* =========================
+   מודל סיום
+========================= */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #2b1055, #7597de);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.modal-content h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.modal-content p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.btn {
+    background: #ff00cc;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    cursor: pointer;
     margin: 10px;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    background: #e600b8;
+}
+
+.btn.secondary {
+    background: transparent;
+    border: 2px solid white;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* =========================
+   רספונסיביות
+========================= */
+@media (max-width: 600px) {
+    .game-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+    .card {
+        width: 70px;
+        height: 70px;
+    }
+    .card-back, .card-front::after {
+        font-size: 1.5rem;
+    }
 }

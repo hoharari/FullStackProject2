@@ -1,0 +1,140 @@
+/* =========================
+   הגדרות בסיס ורקע
+========================= */
+body {
+    margin: 0;
+    font-family: 'IBM Plex Sans Hebrew', sans-serif;
+    /* רקע גרדיאנט קבוע שלא זז בגלילה */
+    background: linear-gradient(135deg, #1a0b2e, #2d1b4e, #432c7a);
+    background-attachment: fixed; 
+    color: white;
+    min-height: 100vh; /* חובה! מונע מהרקע להישבר */
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================
+   HEADER
+========================= */
+.lb-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(0, 0, 0, 0.2); /* רקע כהה חצי שקוף */
+}
+
+.lb-title {
+    font-family: 'Geom', sans-serif;
+    font-size: 2.5rem;
+    margin: 0;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.6); /* זוהר מוזהב */
+}
+
+.back-btn {
+    text-decoration: none;
+    color: white;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(5px);
+}
+
+/* =========================
+   MAIN CONTAINER & TABLE
+========================= */
+.lb-main {
+    flex: 1; /* דוחף את הפוטר למטה */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+}
+
+/* הקופסה של הטבלה - אפקט זכוכית */
+.table-container {
+    width: 100%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.07); /* שקוף */
+    backdrop-filter: blur(15px); /* טשטוש הרקע מאחור */
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    overflow: hidden; /* פינות עגולות לטבלה */
+}
+
+.ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.ranking-table th {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 18px;
+    font-size: 1.2rem;
+    color: #aebbf0;
+    font-weight: 700;
+}
+
+.ranking-table td {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 1.1rem;
+}
+
+/* שורה אחרונה ללא קו תחתון */
+.ranking-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* אפקט מעבר עכבר על שורה */
+.ranking-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* =========================
+   עיצוב שורות מיוחדות
+========================= */
+
+/* המשתמש הנוכחי (אני) */
+.current-user {
+    background: rgba(75, 0, 255, 0.4) !important; /* סגול בולט */
+    box-shadow: inset 3px 0 0 #00d9ff; /* פס תכלת בצד */
+    font-weight: bold;
+}
+
+/* מקום ראשון 🥇 */
+.rank-1 td { 
+    color: #ffd700; 
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* מקום שני 🥈 */
+.rank-2 td { 
+    color: #e0e0e0; 
+    font-weight: bold; 
+}
+
+/* מקום שלישי 🥉 */
+.rank-3 td { 
+    color: #cd7f32; 
+    font-weight: bold; 
+}
+
+/* תגית דרגה */
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+}

@@ -12,7 +12,7 @@ html {
 
 body {
     font-family: 'Huninn', serif;
-    background: linear-gradient( #2a00ff, #320073, #6f00a8);
+    background: linear-gradient(to bottom,  #2a00ff, #260066, #4d0080);
     color:  #ffffff;;
     line-height: 1.6;
 }
@@ -50,12 +50,7 @@ header h1, header h2 {
     justify-content: space-between;
     align-items: center;
     padding: 15px 40px;
-     background: linear-gradient(
-        to bottom,
-        #000000,
-        #1a1a1a,
-        #000000
-    );
+    background: linear-gradient(to bottom, #0079ff87, #40cceedb, #051fff);
     color: var(--white);
 }
 

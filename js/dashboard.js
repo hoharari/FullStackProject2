@@ -1,40 +1,50 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // אימייל של המשתמש המחובר
+    // בדיקת אבטחה: האם יש משתמש מחובר?
     const currentEmail = localStorage.getItem("currentUserEmail");
 
     if (!currentEmail) {
-        alert("אין משתמש מחובר");
+        alert("אינך מחובר, מועבר לעמוד כניסה...");
         window.location.href = "login.html";
         return;
     }
 
-    // כל המשתמשים
+    // שליפת נתונים
     const users = JSON.parse(localStorage.getItem("users")) || [];
-
-    // מציאת המשתמש הנוכחי
     const user = users.find(u => u.email === currentEmail);
 
     if (!user) {
-        alert("משתמש לא נמצא");
+        // מקרה קצה: האימייל שמור בדפדפן אבל המשתמש נמחק מהמערכת
+        localStorage.removeItem("currentUserEmail");
+        window.location.href = "login.html";
         return;
     }
 
-    // הצגת נתונים אמיתיים
+    // עדכון ה-DOM עם פרטי המשתמש
     document.getElementById("userName").textContent = user.name || "שחקן";
     document.getElementById("visits").textContent = user.loginCount || 0;
     document.getElementById("score").textContent = user.score || 0;
 
     if (document.getElementById("lastLogin")) {
-        document.getElementById("lastLogin").textContent =
-            user.lastLogin || "לא זמין";
+        document.getElementById("lastLogin").textContent = user.lastLogin || "זוהי כניסה ראשונה";
     }
 
-    // פתיחה / סגירה של הפרופיל
+    // ניהול תפריט פרופיל
     const profileToggle = document.getElementById("profileToggle");
     const profileContent = document.getElementById("profileContent");
 
     profileToggle.addEventListener("click", () => {
         profileContent.classList.toggle("active");
     });
+
+    // --- לוגיקת התנתקות (Logout) ---
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+            // מחיקת ה"סשן"
+            localStorage.removeItem("currentUserEmail");
+            alert("התנתקת בהצלחה 👋");
+            window.location.href = "index.html";
+        });
+    }
 });

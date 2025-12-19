@@ -2,18 +2,54 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>משחק זיכרון 🧠</title>
-    <link rel="stylesheet" href="../css/memory.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחק זיכרון 🧠 | PLAYIT</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geom:wght@300;400;700&family=IBM+Plex+Sans+Hebrew:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/memory.css">
 </head>
 <body>
 
-<a href="../dashboard.html" class="back-btn">⬅ חזרה לדאשבורד</a>
+    <header class="game-header">
+        <a href="dashboard.html" class="back-btn">⬅ חזרה לדאשבורד</a>
+        <h1 class="game-title">🧠 משחק זיכרון</h1>
+    </header>
 
-<h1>🧠 משחק זיכרון</h1>
+    <main class="game-container">
+        <div class="stats-panel">
+            <div class="stat-box">
+                <span class="label">ניסיונות</span>
+                <span class="value" id="moves">0</span>
+            </div>
+            <div class="stat-box">
+                <span class="label">זמן</span>
+                <span class="value" id="timer">00:00</span>
+            </div>
+            <div class="stat-box">
+                <span class="label">זוגות</span>
+                <span class="value" id="matches">0</span>
+            </div>
+        </div>
 
-<div id="game"></div>
-<p>ניסיונות: <span id="moves">0</span></p>
+        <div id="game-grid" class="game-grid">
+            </div>
+    </main>
 
-<script src="../js/memory.js"></script>
+    <div id="gameOverModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>🎉 כל הכבוד! 🎉</h2>
+            <p>סיימת את המשחק בהצלחה!</p>
+            <p>זמן כולל: <span id="finalTime"></span></p>
+            <p>מספר מהלכים: <span id="finalMoves"></span></p>
+            <button class="btn" onclick="location.reload()">שחק שוב 🔄</button>
+            <button class="btn secondary" onclick="window.location.href='dashboard.html'">יציאה 🚪</button>
+        </div>
+    </div>
+
+    <script src="js/memory.js"></script>
 </body>
 </html>
