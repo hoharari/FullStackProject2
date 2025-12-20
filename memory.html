@@ -20,33 +20,52 @@
     </header>
 
     <main class="game-container">
-        <div class="stats-panel">
-            <div class="stat-box">
-                <span class="label">ניסיונות</span>
-                <span class="value" id="moves">0</span>
-            </div>
-            <div class="stat-box">
-                <span class="label">זמן</span>
-                <span class="value" id="timer">00:00</span>
-            </div>
-            <div class="stat-box">
-                <span class="label">זוגות</span>
-                <span class="value" id="matches">0</span>
-            </div>
+        
+        <div id="level-menu" class="level-menu">
+            <h2>בחר רמת קושי</h2>
+            <div class="levels-grid">
+                </div>
         </div>
 
-        <div id="game-grid" class="game-grid">
+        <div id="game-area" class="hidden">
+            <div class="stats-panel">
+                <div class="stat-box">
+                    <span class="label">שלב</span>
+                    <span class="value" id="currentLevelDisplay">1</span>
+                </div>
+                <div class="stat-box">
+                    <span class="label">מהלכים</span>
+                    <span class="value" id="moves">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="label">זמן</span>
+                    <span class="value" id="timer">00:00</span>
+                </div>
             </div>
+
+            <div id="game-grid" class="game-grid"></div>
+        </div>
+
     </main>
 
-    <div id="gameOverModal" class="modal hidden">
+    <div id="levelCompleteModal" class="modal hidden">
         <div class="modal-content">
             <h2>🎉 כל הכבוד! 🎉</h2>
-            <p>סיימת את המשחק בהצלחה!</p>
-            <p>זמן כולל: <span id="finalTime"></span></p>
-            <p>מספר מהלכים: <span id="finalMoves"></span></p>
-            <button class="btn" onclick="location.reload()">שחק שוב 🔄</button>
-            <button class="btn secondary" onclick="window.location.href='dashboard.html'">יציאה 🚪</button>
+            <p>סיימת את שלב <span id="finishedLevelNum"></span>!</p>
+            <p>זמן: <span id="finalTime"></span> | מהלכים: <span id="finalMoves"></span></p>
+            
+            <div class="modal-buttons">
+                <button id="nextLevelBtn" class="btn">לשלב הבא ⏭️</button>
+                <button class="btn secondary" onclick="location.reload()">לתפריט השלבים 🏠</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="gameCompleteModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>🏆 את/ה אלוף/ה! 🏆</h2>
+            <p>סיימת את כל השלבים במשחק!</p>
+            <button class="btn" onclick="window.location.href='dashboard.html'">חזרה לדאשבורד</button>
         </div>
     </div>
 

@@ -1,208 +1,343 @@
-
 // ===============================
+// הגדרות שלבים
+// ===============================
+const levels = [
+    { 
+        id: 1, 
+        targetScore: 10, 
+        speed: 3, 
+        spawnRate: 1000, 
+        hasBombs: false 
+    },
+    { 
+        id: 2, 
+        targetScore: 15, 
+        speed: 4, 
+        spawnRate: 900, 
+        hasBombs: true, 
+        bombChance: 0.3 // 30% סיכוי לפצצה
+    },
+    { 
+        id: 3, 
+        targetScore: 20, 
+        speed: 7, // מהיר מאוד!
+        spawnRate: 600, 
+        hasBombs: true, 
+        bombChance: 0.4 
+    }
+];
+
 // משתני משחק
-// ===============================
-let gameRunning = true;
+let currentLevelConfig = null;
+let gameRunning = false;
 let score = 0;
-let misses = 0;
-let scoreSaved = false;
+let lives = 3;
+let spawnInterval;
+let gameLoopInterval;
 
-// משתני קושי (דרישת חובה: רמות קושי משתנות)
-let speed = 2;          // מהירות התחלתית
-const SPEED_INC = 0.5;  // בכמה המהירות עולה
-const LEVEL_STEP = 5;   // כל כמה נקודות המהירות עולה
-const MAX_MISSES = 3;
-
-// טיימר ליצירת כוכבים
-let starInterval;
-const STAR_INTERVAL_TIME = 1200;
-
-// ===============================
-// אלמנטים מה-DOM
-// ===============================
+// אלמנטים ב-DOM
+const levelMenu = document.getElementById("level-menu");
+const levelsGrid = document.querySelector(".levels-grid");
+const gameContainer = document.getElementById("game-container");
 const gameArea = document.querySelector(".game-area");
 const player = document.getElementById("player");
-const scoreEl = document.getElementById("score");
 
-// כפתורי מגע
-const leftBtn = document.getElementById("leftBtn");
-const rightBtn = document.getElementById("rightBtn");
+// אלמנטים של טקסט
+const scoreEl = document.getElementById("score");
+const targetScoreEl = document.getElementById("targetScore");
+const livesEl = document.getElementById("lives");
+const livesContainer = document.getElementById("livesContainer");
+const currentLevelDisplay = document.getElementById("currentLevelDisplay");
 
 // מסך סיום
 const gameOverScreen = document.getElementById("gameOver");
-const retryBtn = document.getElementById("retryBtn");
-const menuBtn = document.getElementById("menuBtn");
+const gameOverTitle = document.getElementById("gameOverTitle");
+const gameOverMessage = document.getElementById("gameOverMessage");
+const nextLevelBtn = document.getElementById("nextLevelBtn");
+
+// כפתורי שליטה
+const leftBtn = document.getElementById("leftBtn");
+const rightBtn = document.getElementById("rightBtn");
+
+// מיקום שחקן
+let playerX = 50; // באחוזים (0-100)
 
 // ===============================
-// ניהול תנועת השחקן
+// אתחול תפריט
 // ===============================
-let playerX = 160; 
+initLevelMenu();
 
+function initLevelMenu() {
+    const currentUserEmail = localStorage.getItem("currentUserEmail");
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let user = users.find(u => u.email === currentUserEmail) || {};
+    
+    // אם אין לו נתון של שלב מקסימלי, נתחיל מ-1
+    const maxLevel = user.catcherMaxLevel || 1;
+
+    levelsGrid.innerHTML = "";
+
+    levels.forEach(level => {
+        const btn = document.createElement("button");
+        btn.classList.add("level-btn");
+
+        if (level.id <= maxLevel) {
+            btn.classList.add("unlocked");
+            btn.innerHTML = `שלב ${level.id} <br> ▶️`;
+            btn.onclick = () => startGame(level);
+        } else {
+            btn.classList.add("locked");
+            btn.innerHTML = `שלב ${level.id} <br> 🔒`;
+        }
+        levelsGrid.appendChild(btn);
+    });
+}
+
+// ===============================
+// התחלת משחק
+// ===============================
+function startGame(levelConfig) {
+    currentLevelConfig = levelConfig;
+    gameRunning = true;
+    score = 0;
+    lives = 3;
+    playerX = 50; // מרכז
+    updatePlayerPosition();
+
+    // עדכון UI
+    levelMenu.classList.add("hidden");
+    gameContainer.classList.remove("hidden");
+    gameOverScreen.classList.add("hidden");
+    
+    scoreEl.textContent = score;
+    targetScoreEl.textContent = levelConfig.targetScore;
+    currentLevelDisplay.textContent = levelConfig.id;
+
+    // הצגת/הסתרת חיים לפי השלב
+    if (levelConfig.hasBombs) {
+        livesContainer.style.display = "block";
+        updateLivesDisplay();
+    } else {
+        livesContainer.style.display = "none";
+    }
+
+    // ניקוי אלמנטים ישנים
+    document.querySelectorAll('.item').forEach(e => e.remove());
+
+    // התחלת הלולאות
+    spawnInterval = setInterval(createItem, levelConfig.spawnRate);
+    gameLoopInterval = requestAnimationFrame(gameLoop);
+}
+
+// ===============================
+// לוגיקת המשחק (Game Loop)
+// ===============================
+function createItem() {
+    if (!gameRunning) return;
+
+    const item = document.createElement("div");
+    item.classList.add("item");
+    
+    // החלטה אם זה כוכב או פצצה
+    let isBomb = false;
+    if (currentLevelConfig.hasBombs && Math.random() < currentLevelConfig.bombChance) {
+        isBomb = true;
+        item.classList.add("bomb");
+        item.textContent = "💣";
+    } else {
+        item.classList.add("star");
+        item.textContent = "⭐";
+    }
+
+    // מיקום רנדומלי (באחוזים כדי למנוע בעיות רספונסיביות)
+    item.style.left = Math.random() * 90 + "%"; 
+    item.style.top = "0px";
+    
+    // שמירת מידע על האלמנט עצמו
+    item.dataset.y = 0;
+    item.dataset.isBomb = isBomb;
+
+    gameArea.appendChild(item);
+}
+
+function gameLoop() {
+    if (!gameRunning) return;
+
+    const items = document.querySelectorAll('.item');
+    const playerRect = player.getBoundingClientRect();
+
+    items.forEach(item => {
+        // תזוזה למטה
+        let y = parseFloat(item.dataset.y);
+        y += currentLevelConfig.speed;
+        item.dataset.y = y;
+        item.style.top = y + "px";
+
+        // בדיקת התנגשות
+        const itemRect = item.getBoundingClientRect();
+
+        if (
+            itemRect.bottom >= playerRect.top &&
+            itemRect.right >= playerRect.left &&
+            itemRect.left <= playerRect.right &&
+            itemRect.top <= playerRect.bottom
+        ) {
+            // התנגשות!
+            handleCollision(item);
+        }
+
+        // יצא מהמסך
+        if (y > gameArea.clientHeight) {
+            item.remove();
+            // אם זה כוכב ופספסנו - זה לא נורא במשחק הזה, אבל אפשר להוסיף עונש אם רוצים
+        }
+    });
+
+    gameLoopInterval = requestAnimationFrame(gameLoop);
+}
+
+function handleCollision(item) {
+    const isBomb = item.dataset.isBomb === "true";
+    item.remove();
+
+    if (isBomb) {
+        // אוי ואבוי - פצצה
+        lives--;
+        updateLivesDisplay();
+        gameArea.style.backgroundColor = "#ffcccc"; // הבהוב אדום
+        setTimeout(() => gameArea.style.backgroundColor = "", 200);
+
+        if (lives <= 0) {
+            gameOver(false);
+        }
+    } else {
+        // יופי - כוכב
+        score++;
+        scoreEl.textContent = score;
+        
+        // בדיקת ניצחון
+        if (score >= currentLevelConfig.targetScore) {
+            gameOver(true);
+        }
+    }
+}
+
+function updateLivesDisplay() {
+    let hearts = "";
+    for(let i=0; i<lives; i++) hearts += "❤️";
+    livesEl.textContent = hearts;
+}
+
+// ===============================
+// תנועת שחקן
+// ===============================
 function updatePlayerPosition() {
-    player.style.left = playerX + "px";
+    player.style.left = playerX + "%";
 }
 
 function moveLeft() {
-    if (!gameRunning) return;
-    if (playerX > 0) {
-        playerX -= 25;
+    if (playerX > 5) {
+        playerX -= 10;
         updatePlayerPosition();
     }
 }
 
 function moveRight() {
-    if (!gameRunning) return;
-    // 60 הוא רוחב משוער של השחקן כדי שלא יצא מהמסך
-    if (playerX < gameArea.clientWidth - 60) {
-        playerX += 25;
+    if (playerX < 90) {
+        playerX += 10;
         updatePlayerPosition();
     }
 }
 
-// מאזינים לכפתורי מסך (למובייל/טאבלט)
+// אירועים (מקלדת + מגע)
 leftBtn.addEventListener("click", moveLeft);
 rightBtn.addEventListener("click", moveRight);
 
-// מאזינים למקלדת (למחשב - דרישת נגישות/נוחות)
 document.addEventListener("keydown", (e) => {
+    if (!gameRunning) return;
     if (e.key === "ArrowLeft") moveLeft();
     if (e.key === "ArrowRight") moveRight();
 });
 
 // ===============================
-// לוגיקת המשחק: יצירת כוכבים וקושי
+// סיום משחק וניהול שלבים
 // ===============================
-function createStar() {
-    if (!gameRunning) return;
+function gameOver(isWin) {
+    gameRunning = false;
+    clearInterval(spawnInterval);
+    cancelAnimationFrame(gameLoopInterval);
 
-    // יצירת אלמנט DOM חדש
-    const star = document.createElement("div");
-    star.classList.add("star");
-    star.textContent = "⭐";
-    
-    // מיקום רנדומלי בתוך גבולות המשחק
-    star.style.left = Math.random() * (gameArea.clientWidth - 40) + "px";
-    gameArea.appendChild(star);
+    gameOverScreen.classList.remove("hidden");
 
-    let y = 0;
-
-    // לולאת נפילה ספציפית לכל כוכב
-    const fall = setInterval(() => {
-        if (!gameRunning) {
-            star.remove();
-            clearInterval(fall);
-            return;
-        }
-
-        y += speed; // המהירות משתנה לפי השלב הנוכחי
-        star.style.top = y + "px";
-
-        const starRect = star.getBoundingClientRect();
-        const playerRect = player.getBoundingClientRect();
-
-        // בדיקת התנגשות (Collision Detection)
-        if (
-            starRect.bottom >= playerRect.top &&
-            starRect.left < playerRect.right &&
-            starRect.right > playerRect.left
-        ) {
-            handleCatch(star, fall);
-        }
-
-        // בדיקה אם הכוכב יצא מהמסך (פספוס)
-        if (y > gameArea.clientHeight) {
-            handleMiss(star, fall);
-        }
-    }, 20);
-}
-
-// טיפול בתפיסה מוצלחת
-function handleCatch(star, intervalId) {
-    score++;
-    scoreEl.textContent = score;
-    
-    // === שינוי רמת קושי! ===
-    // כל X נקודות - המהירות עולה
-    if (score % LEVEL_STEP === 0) {
-        speed += SPEED_INC;
-        
-        // אפקט ויזואלי קטן לעליית שלב
-        gameArea.style.boxShadow = "0 0 25px #ffd700";
-        setTimeout(() => gameArea.style.boxShadow = "", 500);
-    }
-
-    star.remove();
-    clearInterval(intervalId);
-}
-
-// טיפול בפספוס
-function handleMiss(star, intervalId) {
-    star.remove();
-    clearInterval(intervalId);
-    misses++;
-
-    if (misses >= MAX_MISSES) {
-        endGame();
-    }
-}
-
-// ===============================
-// שמירת נתונים (Local Storage)
-// ===============================
-function saveBestScoreStars(currentScore) {
-    const currentUserEmail = localStorage.getItem("currentUserEmail");
-    if (!currentUserEmail) return; // לא שומרים לאורחים
-
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-    // מציאת המשתמש ועדכון המצביע שלו (לא עותק)
-    const userIndex = users.findIndex(u => u.email === currentUserEmail);
-
-    if (userIndex !== -1) {
-        const user = users[userIndex];
-        
-        // אתחול אובייקטים אם חסרים
-        if (!user.gamesPlayed) user.gamesPlayed = {};
-        if (!user.bestScores) user.bestScores = {};
-
-        // עדכון סטטיסטיקות
-        user.gamesPlayed.stars = (user.gamesPlayed.stars || 0) + 1;
-        
-        if (currentScore > (user.bestScores.stars || 0)) {
-            user.bestScores.stars = currentScore;
-        }
+    if (isWin) {
+        gameOverTitle.textContent = "🎉 כל הכבוד!";
+        gameOverMessage.textContent = `סיימת את שלב ${currentLevelConfig.id}!`;
         
         // עדכון ניקוד כללי באתר
-        user.score = (user.score || 0) + currentScore;
+        updateGlobalScore(score);
+        
+        // פתיחת שלב הבא
+        const nextLevelId = currentLevelConfig.id + 1;
+        if (nextLevelId <= levels.length) {
+            updateMaxLevel(nextLevelId);
+            nextLevelBtn.classList.remove("hidden");
+            
+            // הגדרת כפתור "הבא"
+            nextLevelBtn.onclick = () => {
+                const nextLevel = levels.find(l => l.id === nextLevelId);
+                startGame(nextLevel);
+            };
+        } else {
+            gameOverMessage.textContent = "🏆 סיימת את כל השלבים במשחק!";
+            nextLevelBtn.classList.add("hidden");
+        }
 
-        // שמירה חזרה
-        users[userIndex] = user;
+    } else {
+        gameOverTitle.textContent = "❌ נפסלת";
+        gameOverMessage.textContent = "נתקלת ביותר מדי מכשולים!";
+        nextLevelBtn.classList.add("hidden");
+    }
+}
+
+// עדכונים ל-LocalStorage
+function updateGlobalScore(points) {
+    const currentUserEmail = localStorage.getItem("currentUserEmail");
+    if (!currentUserEmail) return;
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let userIndex = users.findIndex(u => u.email === currentUserEmail);
+
+    if (userIndex !== -1) {
+        users[userIndex].score = (users[userIndex].score || 0) + points;
+        // עדכון סטטיסטיקות ספציפיות
+        if (!users[userIndex].gamesPlayed) users[userIndex].gamesPlayed = {};
+        users[userIndex].gamesPlayed.stars = (users[userIndex].gamesPlayed.stars || 0) + 1;
+        
         localStorage.setItem("users", JSON.stringify(users));
     }
 }
 
-// ===============================
-// סיום ואתחול משחק
-// ===============================
-function endGame() {
-    if (!gameRunning) return;
+function updateMaxLevel(lvl) {
+    const currentUserEmail = localStorage.getItem("currentUserEmail");
+    if (!currentUserEmail) return;
 
-    gameRunning = false;
-    clearInterval(starInterval);
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let userIndex = users.findIndex(u => u.email === currentUserEmail);
 
-    if (!scoreSaved) {
-        saveBestScoreStars(score);
-        scoreSaved = true;
+    if (userIndex !== -1) {
+        // עדכון רק אם השלב החדש גבוה מהקיים
+        if (!users[userIndex].catcherMaxLevel || lvl > users[userIndex].catcherMaxLevel) {
+            users[userIndex].catcherMaxLevel = lvl;
+            localStorage.setItem("users", JSON.stringify(users));
+        }
     }
-
-    // ניקוי המסך מכוכבים שנשארו
-    document.querySelectorAll('.star').forEach(s => s.remove());
-    
-    gameOverScreen.classList.remove("hidden");
 }
 
-// התחלת המשחק
-starInterval = setInterval(createStar, STAR_INTERVAL_TIME);
-
-// כפתורי ניווט בסוף משחק
-retryBtn.addEventListener("click", () => location.reload());
-menuBtn.addEventListener("click", () => window.location.href = "../dashboard.html");
+// כפתורי תפריט סיום
+document.getElementById("retryBtn").addEventListener("click", () => startGame(currentLevelConfig));
+document.getElementById("menuBtn").addEventListener("click", () => {
+    gameOverScreen.classList.add("hidden");
+    gameContainer.classList.add("hidden");
+    levelMenu.classList.remove("hidden");
+    initLevelMenu(); // רענון התפריט (כדי לראות מנעולים שנפתחו)
+});

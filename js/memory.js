@@ -1,85 +1,129 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // מערך האייקונים (כפול כי צריך זוגות)
-    const icons = ["🚀", "🚀", "🎮", "🎮", "👻", "👻", "💎", "💎", "🦄", "🦄", "🍕", "🍕", "🎸", "🎸", "🐱", "🐱"];
-    
-    // ערבוב הקלפים
-    icons.sort(() => Math.random() - 0.5);
+    // מאגר אייקונים מורחב
+    const allIcons = [
+        "🚀", "🎮", "👻", "💎", "🦄", "🍕", "🎸", "🐱",
+        "🍔", "⚽", "🚗", "🌟", "🎈", "🍦", "👑", "🍀",
+        "🐶", "🍄", "🍩", "🌍", "🍉", "🔥", "🌈", "🦜"
+    ];
 
-    const grid = document.getElementById("game-grid");
-    const movesEl = document.getElementById("moves");
-    const timerEl = document.getElementById("timer");
-    const matchesEl = document.getElementById("matches");
-    
-    // אלמנטים למודל סיום
-    const modal = document.getElementById("gameOverModal");
-    const finalTimeEl = document.getElementById("finalTime");
-    const finalMovesEl = document.getElementById("finalMoves");
+    // הגדרות 4 השלבים
+    const levels = [
+        { id: 1, pairs: 2 },  // 4 קלפים (2x2)
+        { id: 2, pairs: 6 },  // 12 קלפים (4x3)
+        { id: 3, pairs: 8 },  // 16 קלפים (4x4)
+        { id: 4, pairs: 10 }  // 20 קלפים (5x4)
+    ];
 
-    let firstCard = null;
-    let secondCard = null;
-    let lockBoard = false; // מונע לחיצות בזמן בדיקה
+    let currentLevelConfig = null;
+    let gameInterval;
+    let seconds = 0;
     let moves = 0;
     let matches = 0;
     
-    // משתני זמן
-    let timeSeconds = 0;
-    let timerInterval;
-    let gameStarted = false;
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
 
-    // יצירת הקלפים על הלוח
-    icons.forEach(icon => {
-        // יצירת מבנה HTML עבור אפקט ההיפוך
-        const card = document.createElement("div");
-        card.classList.add("card");
-        
-        card.innerHTML = `
-            <div class="card-inner">
-                <div class="card-front"></div>
-                <div class="card-back">${icon}</div>
-            </div>
-        `;
+    // אלמנטים
+    const levelMenu = document.getElementById("level-menu");
+    const levelsGrid = document.querySelector(".levels-grid");
+    const gameArea = document.getElementById("game-area");
+    const gameGrid = document.getElementById("game-grid");
+    const timerEl = document.getElementById("timer");
+    const movesEl = document.getElementById("moves");
+    const currentLevelDisplay = document.getElementById("currentLevelDisplay");
+    
+    // מודלים
+    const levelCompleteModal = document.getElementById("levelCompleteModal");
+    const gameCompleteModal = document.getElementById("gameCompleteModal");
+    const nextLevelBtn = document.getElementById("nextLevelBtn");
 
-        // הוספת האזנה ללחיצה
-        card.addEventListener("click", () => flipCard(card, icon));
-        grid.appendChild(card);
-    });
+    // אתחול
+    initLevelMenu();
 
-    function startTimer() {
-        if (gameStarted) return;
-        gameStarted = true;
-        timerInterval = setInterval(() => {
-            timeSeconds++;
-            const mins = Math.floor(timeSeconds / 60).toString().padStart(2, '0');
-            const secs = (timeSeconds % 60).toString().padStart(2, '0');
-            timerEl.textContent = `${mins}:${secs}`;
-        }, 1000);
+    function initLevelMenu() {
+        const user = getCurrentUser();
+        const maxLevel = user.memoryMaxLevel || 1; 
+
+        levelsGrid.innerHTML = ""; 
+
+        levels.forEach(level => {
+            const btn = document.createElement("button");
+            btn.classList.add("level-btn");
+            
+            if (level.id <= maxLevel) {
+                btn.classList.add("unlocked");
+                btn.innerHTML = `שלב ${level.id} <span>▶️</span>`;
+                btn.onclick = () => startGame(level);
+            } else {
+                btn.classList.add("locked");
+                btn.innerHTML = `שלב ${level.id} <span class="lock-icon">🔒</span>`;
+            }
+
+            levelsGrid.appendChild(btn);
+        });
     }
 
-    function flipCard(card, icon) {
-        if (lockBoard) return; // הלוח נעול
-        if (card === firstCard) return; // לא ללחוץ על אותו קלף פעמיים
-        if (card.classList.contains("flipped")) return; // קלף כבר הפוך
+    function startGame(levelConfig) {
+        currentLevelConfig = levelConfig;
+        
+        levelMenu.classList.add("hidden");
+        gameArea.classList.remove("hidden");
+        levelCompleteModal.classList.add("hidden");
 
-        // התחלת טיימר בלחיצה הראשונה
-        startTimer();
+        moves = 0;
+        matches = 0;
+        seconds = 0;
+        movesEl.textContent = "0";
+        timerEl.textContent = "00:00";
+        currentLevelDisplay.textContent = levelConfig.id;
 
-        // ביצוע ההיפוך ויזואלית
-        card.classList.add("flipped");
+        buildGrid(levelConfig);
+        
+        clearInterval(gameInterval);
+        gameInterval = setInterval(updateTimer, 1000);
+    }
+
+    function buildGrid(config) {
+        gameGrid.innerHTML = "";
+        gameGrid.className = "game-grid"; 
+        gameGrid.classList.add(`grid-level-${config.id}`);
+
+        const gameIcons = allIcons.slice(0, config.pairs);
+        const deck = [...gameIcons, ...gameIcons];
+        deck.sort(() => Math.random() - 0.5);
+
+        deck.forEach(icon => {
+            const card = document.createElement("div");
+            card.classList.add("card");
+            card.innerHTML = `
+                <div class="card-inner">
+                    <div class="card-front"></div>
+                    <div class="card-back">${icon}</div>
+                </div>
+            `;
+            
+            card.dataset.icon = icon;
+            card.addEventListener("click", flipCard);
+            gameGrid.appendChild(card);
+        });
+    }
+
+    function flipCard() {
+        if (lockBoard) return;
+        if (this === firstCard) return;
+        if (this.classList.contains("flipped")) return;
+
+        this.classList.add("flipped");
 
         if (!firstCard) {
-            // קלף ראשון
-            firstCard = card;
-            firstCard.dataset.icon = icon;
+            firstCard = this;
             return;
         }
 
-        // קלף שני
-        secondCard = card;
-        secondCard.dataset.icon = icon;
-        
+        secondCard = this;
         moves++;
         movesEl.textContent = moves;
-
         checkForMatch();
     }
 
@@ -94,61 +138,93 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function disableCards() {
-        // סימון התאמה
+        matches++;
+        updateScore(10 * currentLevelConfig.id);
+
+        // הוספת קלאס matched כדי להפעיל את הזוהר
         firstCard.classList.add("matched");
         secondCard.classList.add("matched");
 
-        matches++;
-        matchesEl.textContent = matches;
+        firstCard = null;
+        secondCard = null;
 
-        // עדכון ניקוד ב-LocalStorage
-        updateScore(10);
-
-        resetBoard();
-
-        // בדיקת ניצחון
-        if (matches === icons.length / 2) {
-            endGame();
+        // בדיקת ניצחון עם דיליי
+        if (matches === currentLevelConfig.pairs) {
+            // === התיקון כאן: השהייה של שניה לפני הצגת הניצחון ===
+            setTimeout(() => {
+                endLevel();
+            }, 1000);
         }
     }
 
     function unflipCards() {
-        lockBoard = true; // נועלים את הלוח כדי שהמשתמש לא ילחץ על עוד קלפים
+        lockBoard = true;
         setTimeout(() => {
             firstCard.classList.remove("flipped");
             secondCard.classList.remove("flipped");
-            resetBoard();
-        }, 1000); // מחכים שנייה ואז הופכים חזרה
+            lockBoard = false;
+            firstCard = null;
+            secondCard = null;
+        }, 1000);
     }
 
-    function resetBoard() {
-        [firstCard, secondCard, lockBoard] = [null, null, false];
+    function updateTimer() {
+        seconds++;
+        const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const secs = (seconds % 60).toString().padStart(2, '0');
+        timerEl.textContent = `${mins}:${secs}`;
     }
 
-    function endGame() {
-        clearInterval(timerInterval);
+    function endLevel() {
+        clearInterval(gameInterval);
+
+        const user = getCurrentUser();
+        const currentMax = user.memoryMaxLevel || 1;
         
-        setTimeout(() => {
-            finalTimeEl.textContent = timerEl.textContent;
-            finalMovesEl.textContent = moves;
-            modal.classList.remove("hidden");
-        }, 500);
+        if (currentLevelConfig.id >= currentMax && currentLevelConfig.id < levels.length) {
+            updateUserMaxLevel(currentLevelConfig.id + 1);
+        }
+
+        document.getElementById("finishedLevelNum").textContent = currentLevelConfig.id;
+        document.getElementById("finalTime").textContent = timerEl.textContent;
+        document.getElementById("finalMoves").textContent = moves;
+
+        if (currentLevelConfig.id === levels.length) {
+            gameCompleteModal.classList.remove("hidden");
+        } else {
+            levelCompleteModal.classList.remove("hidden");
+            
+            nextLevelBtn.onclick = () => {
+                const nextLevel = levels.find(l => l.id === currentLevelConfig.id + 1);
+                startGame(nextLevel);
+            };
+        }
     }
 
-    // פונקציה לעדכון ניקוד (כמו בדאשבורד)
-    function updateScore(points) {
-        const currentEmail = localStorage.getItem("currentUserEmail");
-        if (!currentEmail) return;
-
+    function getCurrentUser() {
+        const email = localStorage.getItem("currentUserEmail");
         const users = JSON.parse(localStorage.getItem("users")) || [];
-        const userIndex = users.findIndex(u => u.email === currentEmail);
+        return users.find(u => u.email === email) || {};
+    }
 
-        if (userIndex !== -1) {
-            users[userIndex].score = (users[userIndex].score || 0) + points;
-            
-            if (!users[userIndex].gamesPlayed) users[userIndex].gamesPlayed = {};
-            users[userIndex].gamesPlayed.memory = (users[userIndex].gamesPlayed.memory || 0) + 1;
+    function updateScore(points) {
+        const email = localStorage.getItem("currentUserEmail");
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const index = users.findIndex(u => u.email === email);
+        
+        if (index !== -1) {
+            users[index].score = (users[index].score || 0) + points;
+            localStorage.setItem("users", JSON.stringify(users));
+        }
+    }
 
+    function updateUserMaxLevel(newLevel) {
+        const email = localStorage.getItem("currentUserEmail");
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const index = users.findIndex(u => u.email === email);
+        
+        if (index !== -1) {
+            users[index].memoryMaxLevel = newLevel;
             localStorage.setItem("users", JSON.stringify(users));
         }
     }

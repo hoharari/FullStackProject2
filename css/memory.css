@@ -12,6 +12,8 @@ body {
     overflow-x: hidden;
 }
 
+.hidden { display: none !important; }
+
 /* =========================
    סרגל עליון
 ========================= */
@@ -47,18 +49,24 @@ body {
 }
 
 /* =========================
-   אזור המשחק
+   אזור המשחק והנתונים
 ========================= */
 .game-container {
+    width: 100%;
+    max-width: 900px;
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 30px;
-    width: 100%;
-    max-width: 800px;
 }
 
-/* לוח תוצאות */
+#game-area {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .stats-panel {
     display: flex;
     gap: 30px;
@@ -72,6 +80,7 @@ body {
 
 .stat-box {
     text-align: center;
+    min-width: 80px;
 }
 
 .stat-box .label {
@@ -89,28 +98,198 @@ body {
 }
 
 /* =========================
-   גריד הקלפים
+   תפריט שלבים - תיקון החבל 🧗‍♂️
 ========================= */
-.game-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    perspective: 1000px; /* חובה עבור אפקט התלת מימד */
-    margin-bottom: 50px;
+.level-menu {
+    text-align: center;
+    background: rgba(20, 10, 40, 0.7);
+    padding: 40px 60px;
+    border-radius: 40px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.1);
+    animation: fadeIn 0.5s ease;
+    max-width: 500px;
+    width: 90%;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 10;
 }
 
+.level-menu h2 {
+    font-family: 'Geom', sans-serif;
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+    text-shadow: 0 0 15px #bd00ff;
+}
+
+/* קונטיינר עם פרספקטיבה לתלת מימד */
+.levels-grid {
+    display: flex;
+    flex-direction: column-reverse; /* 1 למטה, 4 למעלה */
+    align-items: center;
+    gap: 40px;
+    padding: 20px 0;
+    position: relative;
+    /* זה הסוד: מאפשר לנו לדחוף את החבל לעומק */
+    perspective: 1000px; 
+    transform-style: preserve-3d;
+}
+
+/* === כפתורי השלבים === */
+.level-btn {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.15);
+    font-size: 1.4rem;
+    font-weight: bold;
+    cursor: pointer;
+    /* שינוי באנימציה כדי שלא יקפוץ מעל אחרים */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: 'Geom', sans-serif;
+    position: relative;
+    background: #2a2a2a;
+    color: #888;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    
+    /* מוודא שהכפתור חי במרחב תלת מימדי */
+    transform-style: preserve-3d;
+    transform: translateZ(0); 
+}
+
+/* === החבל (נדחף אחורה) === */
+.level-btn::before {
+    content: '';
+    position: absolute;
+    bottom: 50%; 
+    left: 50%;
+    width: 6px; 
+    height: 160px; 
+    background: repeating-linear-gradient(
+        45deg,
+        #6a4c93,
+        #6a4c93 10px,
+        #523678 10px,
+        #523678 20px
+    );
+    border-radius: 4px;
+    transform-origin: bottom center; 
+    opacity: 0.6;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    pointer-events: none;
+    
+    /* התיקון הקריטי: דחיפה חזקה לעומק (-50px) */
+    /* זה מבטיח שהחבל תמיד יהיה מאחורי הכפתורים, גם כשהם גדלים */
+    z-index: -1;
+}
+
+/* מיקום הזיג-זג וסיבוב החבל */
+.level-btn:nth-child(odd) { margin-right: 80px; }
+/* חבל פונה ימינה + דחיפה לעומק */
+.level-btn:nth-child(odd)::before { 
+    transform: translateX(-50%) rotate(38deg) translateZ(-50px); 
+}
+
+.level-btn:nth-child(even) { margin-left: 80px; }
+/* חבל פונה שמאלה + דחיפה לעומק */
+.level-btn:nth-child(even)::before { 
+    transform: translateX(-50%) rotate(-38deg) translateZ(-50px);
+}
+
+.level-btn:last-child::before { display: none; }
+
+
+/* === מצבים === */
+.level-btn.unlocked {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 25px rgba(0, 114, 255, 0.5);
+}
+
+/* חבל מואר */
+.level-btn.unlocked::before {
+    background: linear-gradient(to top, #0072ff, #a16ae8);
+    opacity: 0.9;
+    box-shadow: 0 0 15px rgba(0, 114, 255, 0.6);
+}
+
+/* HOVER: מגדילים את הכפתור ומקרבים אותו למסך (Z=10px) */
+/* החבל נשאר ב (-50+10 = -40), שזה עדיין מאחורי השכנים שנמצאים ב-0 */
+.level-btn.unlocked:hover {
+    transform: scale(1.15) translateZ(10px); 
+    box-shadow: 0 0 40px rgba(0, 114, 255, 0.9);
+}
+
+.level-btn.locked {
+    background: #1a1a1a;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* פעימה לשלב הנוכחי */
+.level-btn.unlocked:last-of-type {
+    background: linear-gradient(135deg, #ff00cc, #333399);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 0, 204, 0.7); }
+    70% { box-shadow: 0 0 0 20px rgba(255, 0, 204, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 0, 204, 0); }
+}
+
+
 /* =========================
-   עיצוב הקלף והיפוך (Flip)
+   תיקון עיצוב המשחק (הגריד שנשבר)
 ========================= */
+
+.game-grid {
+    display: grid;
+    gap: 15px;
+    perspective: 1000px;
+    margin-bottom: 50px;
+    
+    /* מרכוז הגריד */
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* הגדרות מדויקות לכל שלב כדי שלא יקרסו */
+.grid-level-1 {
+    grid-template-columns: repeat(2, 110px);
+}
+
+.grid-level-2 {
+    grid-template-columns: repeat(4, 90px); /* 4 עמודות * 3 שורות = 12 */
+}
+
+.grid-level-3 {
+    grid-template-columns: repeat(4, 90px); /* 4 עמודות * 4 שורות = 16 */
+}
+
+.grid-level-4 {
+    grid-template-columns: repeat(5, 80px); /* 5 עמודות * 4 שורות = 20 */
+}
+
+/* עיצוב כרטיס המשחק */
 .card {
-    width: 100px;
-    height: 100px;
+    /* מוודא שהכרטיס ריבוע גם אם הגריד נשבר */
+    width: 100%; 
+    aspect-ratio: 1 / 1; 
+    
     position: relative;
     cursor: pointer;
     border-radius: 15px;
 }
 
-/* המיכל הפנימי שמסתובב */
 .card-inner {
     position: relative;
     width: 100%;
@@ -122,17 +301,15 @@ body {
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-/* מצב "הפוך" */
 .card.flipped .card-inner {
     transform: rotateY(180deg);
 }
 
-/* עיצוב הצדדים (קדמי ואחורי) */
 .card-front, .card-back {
     position: absolute;
     width: 100%;
     height: 100%;
-    -webkit-backface-visibility: hidden; /* ספארי */
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     display: flex;
     align-items: center;
@@ -141,48 +318,41 @@ body {
     border: 2px solid rgba(255,255,255,0.1);
 }
 
-/* הצד הקדמי (המוסתר) */
 .card-front {
     background: linear-gradient(135deg, #667eea, #764ba2);
     font-size: 2.5rem;
     color: rgba(255, 255, 255, 0.2);
 }
 
-/* הצד האחורי (הגילוי) */
 .card-back {
     background: white;
     transform: rotateY(180deg);
     font-size: 3rem;
 }
 
-/* הוספת אייקון/שאלה לצד הקדמי */
 .card-front::after {
     content: "❓";
     font-size: 2rem;
     opacity: 0.5;
 }
 
-/* התאמה (Match) */
+/* זוהר לזוג תואם */
 .card.matched .card-inner {
-    box-shadow: 0 0 15px #4effef, 0 0 30px #4effef;
+    box-shadow: 0 0 20px #4effef, 0 0 40px rgba(78, 255, 239, 0.6);
+    border: 2px solid #4effef;
 }
 
 /* =========================
-   מודל סיום
+   מודל סיום (חלונות קופצים)
 ========================= */
 .modal {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.85);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease;
-}
-
-.modal.hidden {
-    display: none;
+    z-index: 2000;
 }
 
 .modal-content {
@@ -192,27 +362,29 @@ body {
     text-align: center;
     border: 1px solid rgba(255,255,255,0.2);
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    animation: popIn 0.4s ease;
 }
 
-.modal-content h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
-.modal-content p {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .btn {
     background: #ff00cc;
     color: white;
     border: none;
-    padding: 10px 25px;
+    padding: 12px 25px;
     border-radius: 20px;
     font-size: 1.1rem;
     cursor: pointer;
-    margin: 10px;
     transition: 0.3s;
 }
 
@@ -226,24 +398,16 @@ body {
     border: 2px solid white;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* =========================
-   רספונסיביות
-========================= */
+/* רספונסיביות */
 @media (max-width: 600px) {
-    .game-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
-    }
-    .card {
-        width: 70px;
-        height: 70px;
-    }
-    .card-back, .card-front::after {
-        font-size: 1.5rem;
-    }
+    .level-menu { padding: 30px; }
+    .level-btn:nth-child(odd) { margin-right: 40px; }
+    .level-btn:nth-child(even) { margin-left: 40px; }
+    
+    .level-btn:nth-child(odd)::before { transform: translateX(-50%) rotate(25deg) translateZ(-50px); }
+    .level-btn:nth-child(even)::before { transform: translateX(-50%) rotate(-25deg) translateZ(-50px); }
+    
+    .game-grid { gap: 8px; }
+    .grid-level-4 { grid-template-columns: repeat(5, 60px); }
+    .card-back { font-size: 2rem; }
 }
