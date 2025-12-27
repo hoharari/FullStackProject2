@@ -4,118 +4,163 @@
 
 /* ---- Hero Section ---- */
 .hero {
-    min-height: 100vh;
+    min-height: 90vh; /* גובה נוח יותר */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 150px 20px 200px;
-    color:  #ffffff;;
+    padding: 120px 20px 100px; /* ריווח מאוזן */
+    color: #ffffff;
 }
-
-
-
 
 /* כותרת ראשית */
 .hero-title {
     font-family: "Bitcount Prop Single", system-ui;
-    font-optical-sizing: auto;
-    font-variation-settings:
-    "slnt" 0,
-    "CRSV" 0.5,
-    "ELSH" 0,
-    "ELXP" 0;
+    font-variation-settings: "slnt" 0, "CRSV" 0.5, "ELSH" 0, "ELXP" 0;
     font-size: 4rem;
-    color: #000;
+    color: #ffffff; /* שינוי לשחור ללבן! */
     margin-bottom: 15px;
-    text-shadow: 4px 4px 18px #4b0066;
-     letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(189, 0, 255, 0.8), 4px 4px 0px #4b0066; /* זוהר ניאון + צל */
+    letter-spacing: 2px;
+    line-height: 1.2;
 }
 
 /* תיאור משפט מתחת */
-.hero-sub {
+.hero-subtitle {
     font-family: 'IBM Plex Sans Hebrew', sans-serif;
-     font-size: 2rem !important;
-    margin-top: 20px;
+    font-size: 1.5rem;
+    margin-top: 10px;
     margin-bottom: 40px;
-    font-weight: bold;
-     color: white;
+    font-weight: 500;
+    color: #e0e0e0;
+    max-width: 600px;
 }
 
-
-
-/* כפתור */
+/* כפתור ראשי */
 .hero-btn {
     font-family: 'IBM Plex Sans Hebrew', sans-serif;
-    padding: 14px 45px;
-    background: linear-gradient(to right, #8a00ff, #0054ff9c);
+    padding: 15px 40px;
+    background: linear-gradient(to right, #00c6ff, #0072ff);
     color: white;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     border-radius: 50px;
     text-decoration: none;
     font-weight: bold;
-    transition: 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0, 114, 255, 0.4);
+    display: inline-block;
+    min-width: 200px;
 }
+
 .hero-btn:hover {
-    transform: scale(1.08);
-    background: #b000e6;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 114, 255, 0.6);
 }
+
+/* כפתור משני (שחקן חדש) */
+.hero-btn.secondary {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: none;
+}
+
+.hero-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+}
+
 .btn-container {
     display: flex;
-    gap: 25px;
-    margin-top: 40px; 
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-
-/* ---- רספונסיביות ---- */
-@media (max-width: 768px) {
-    .hero-title {
-        font-size: 2.8rem;
-    }
-
-    .hero-sub {
-        font-size: 1.2rem;
-    }
-
-    .hero-btn {
-        font-size: 1.1rem;
-        padding: 12px 35px;
-    }
-}
+/* ---- אזור הוידאו ---- */
 .video-showcase {
-    padding: 40px 20px 70px;
+    padding: 60px 20px 100px;
     text-align: center;
     color: #ffffff;
+    background: rgba(0, 0, 0, 0.2); /* רקע כהה עדין להפרדה */
 }
 
 .video-showcase h2 {
+    font-family: 'Geom', sans-serif;
     font-size: 2.2rem;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
 }
 
 .video-showcase p {
     max-width: 700px;
-    margin: 0 auto 35px;
-    opacity: 0.85;
+    margin: 0 auto 40px;
+    opacity: 0.9;
     line-height: 1.6;
+    font-size: 1.1rem;
 }
 
 .video-wrapper {
-    max-width:750px;
+    max-width: 800px;
     margin: 0 auto;
     aspect-ratio: 16 / 9;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .video-wrapper iframe {
     width: 100%;
     height: 100%;
-    border-radius: 20px;
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
-.video-wrapper iframe:hover {
-    transform: scale(1.02);
-    box-shadow: 0 35px 90px rgba(0, 0, 0, 0.6);
+/* ===========================================
+   תיקון רספונסיבי למובייל (index.html)
+=========================================== */
+@media (max-width: 768px) {
+    
+    .hero {
+        padding: 100px 20px 60px; /* פחות רווח מלמעלה */
+        min-height: auto;
+    }
+
+    .hero-title {
+        font-size: 2.5rem; /* כותרת קטנה יותר שתכנס במסך */
+        line-height: 1.1;
+        margin-bottom: 10px;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+    }
+
+    /* כפתורים במובייל - אחד מתחת לשני */
+    .btn-container {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+        max-width: 300px; /* לא רחב מדי */
+    }
+
+    .hero-btn {
+        width: 100%; /* רוחב מלא */
+        padding: 12px;
+        font-size: 1.1rem;
+    }
+
+    /* וידאו */
+    .video-showcase {
+        padding: 40px 15px 60px;
+    }
+
+    .video-showcase h2 {
+        font-size: 1.8rem;
+    }
+    
+    .video-showcase p {
+        font-size: 1rem;
+    }
 }

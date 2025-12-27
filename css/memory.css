@@ -98,18 +98,18 @@ body {
 }
 
 /* =========================
-   תפריט שלבים - תיקון החבל 🧗‍♂️
+   תפריט שלבים - עיצוב חדש
 ========================= */
 .level-menu {
     text-align: center;
     background: rgba(20, 10, 40, 0.7);
-    padding: 40px 60px;
+    padding: 40px;
     border-radius: 40px;
     backdrop-filter: blur(15px);
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     border: 1px solid rgba(255,255,255,0.1);
     animation: fadeIn 0.5s ease;
-    max-width: 500px;
+    max-width: 800px;
     width: 90%;
     margin-bottom: 30px;
     position: relative;
@@ -123,131 +123,109 @@ body {
     text-shadow: 0 0 15px #bd00ff;
 }
 
-/* קונטיינר עם פרספקטיבה לתלת מימד */
 .levels-grid {
     display: flex;
-    flex-direction: column-reverse; /* 1 למטה, 4 למעלה */
-    align-items: center;
-    gap: 40px;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
     padding: 20px 0;
-    position: relative;
-    /* זה הסוד: מאפשר לנו לדחוף את החבל לעומק */
-    perspective: 1000px; 
-    transform-style: preserve-3d;
 }
 
 /* === כפתורי השלבים === */
 .level-btn {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    border: 4px solid rgba(255,255,255,0.15);
-    font-size: 1.4rem;
-    font-weight: bold;
-    cursor: pointer;
-    /* שינוי באנימציה כדי שלא יקפוץ מעל אחרים */
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    width: 110px;
+    height: 110px;
+    border-radius: 25px;
+    border: none;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 8px;
     font-family: 'Geom', sans-serif;
     position: relative;
-    background: #2a2a2a;
-    color: #888;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    
-    /* מוודא שהכפתור חי במרחב תלת מימדי */
-    transform-style: preserve-3d;
-    transform: translateZ(0); 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: none !important;
+    margin: 0 !important;
+    overflow: hidden;
 }
 
-/* === החבל (נדחף אחורה) === */
-.level-btn::before {
-    content: '';
-    position: absolute;
-    bottom: 50%; 
-    left: 50%;
-    width: 6px; 
-    height: 160px; 
-    background: repeating-linear-gradient(
-        45deg,
-        #6a4c93,
-        #6a4c93 10px,
-        #523678 10px,
-        #523678 20px
-    );
-    border-radius: 4px;
-    transform-origin: bottom center; 
-    opacity: 0.6;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    pointer-events: none;
-    
-    /* התיקון הקריטי: דחיפה חזקה לעומק (-50px) */
-    /* זה מבטיח שהחבל תמיד יהיה מאחורי הכפתורים, גם כשהם גדלים */
-    z-index: -1;
-}
+.level-text { font-size: 1.2rem; z-index: 2; }
+.level-icon { font-size: 1.6rem; z-index: 2; }
 
-/* מיקום הזיג-זג וסיבוב החבל */
-.level-btn:nth-child(odd) { margin-right: 80px; }
-/* חבל פונה ימינה + דחיפה לעומק */
-.level-btn:nth-child(odd)::before { 
-    transform: translateX(-50%) rotate(38deg) translateZ(-50px); 
-}
-
-.level-btn:nth-child(even) { margin-left: 80px; }
-/* חבל פונה שמאלה + דחיפה לעומק */
-.level-btn:nth-child(even)::before { 
-    transform: translateX(-50%) rotate(-38deg) translateZ(-50px);
-}
-
-.level-btn:last-child::before { display: none; }
-
-
-/* === מצבים === */
+/* === עיצוב שלבים פתוחים רגילים === */
 .level-btn.unlocked {
     background: linear-gradient(135deg, #00c6ff, #0072ff);
     color: white;
-    border-color: rgba(255, 255, 255, 0.6);
-    box-shadow: 0 0 25px rgba(0, 114, 255, 0.5);
+    box-shadow: 0 10px 20px rgba(0, 114, 255, 0.4), 
+                inset 0 0 0 2px rgba(255,255,255,0.2);
 }
 
-/* חבל מואר */
-.level-btn.unlocked::before {
-    background: linear-gradient(to top, #0072ff, #a16ae8);
-    opacity: 0.9;
-    box-shadow: 0 0 15px rgba(0, 114, 255, 0.6);
-}
-
-/* HOVER: מגדילים את הכפתור ומקרבים אותו למסך (Z=10px) */
-/* החבל נשאר ב (-50+10 = -40), שזה עדיין מאחורי השכנים שנמצאים ב-0 */
 .level-btn.unlocked:hover {
-    transform: scale(1.15) translateZ(10px); 
-    box-shadow: 0 0 40px rgba(0, 114, 255, 0.9);
+    transform: translateY(-8px) scale(1.05) !important;
+    box-shadow: 0 20px 40px rgba(0, 114, 255, 0.6);
 }
 
+/* === עיצוב שלבים נעולים רגילים === */
 .level-btn.locked {
-    background: #1a1a1a;
-    cursor: not-allowed;
-    opacity: 0.7;
+    background: #2a2a2a;
+    color: #555;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    border: 1px solid #333;
 }
 
-/* פעימה לשלב הנוכחי */
-.level-btn.unlocked:last-of-type {
-    background: linear-gradient(135deg, #ff00cc, #333399);
-    animation: pulse 2s infinite;
+/* =========================================================
+   ✨ עיצובים מיוחדים לשלב האחרון (הבוס) ✨
+========================================================= */
+
+/* 1. כשהשלב האחרון עדיין נעול - נראה "מגרה" */
+.level-btn.locked.final-level-locked {
+    background: linear-gradient(135deg, #1f112e, #360f29);
+    border: 2px solid #b8860b; /* מסגרת זהב כהה */
+    color: #b8860b;
+    box-shadow: 0 0 15px rgba(184, 134, 11, 0.2); /* הילה עדינה */
+}
+.level-btn.locked.final-level-locked .level-icon {
+    filter: drop-shadow(0 0 5px rgba(184, 134, 11, 0.5));
 }
 
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(255, 0, 204, 0.7); }
-    70% { box-shadow: 0 0 0 20px rgba(255, 0, 204, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 0, 204, 0); }
+/* 2. כשהשלב האחרון נפתח - נראה "מלכותי" */
+.level-btn.unlocked.final-level-unlocked {
+    background: linear-gradient(135deg, #FFD700, #FFA500, #FF8C00); /* זהב עשיר */
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6),
+                inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+    color: #5a3e00; /* טקסט כהה על רקע זהב */
+    text-shadow: none;
+    animation: goldPulse 2s infinite alternate;
+}
+
+.level-btn.unlocked.final-level-unlocked:hover {
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.9);
+}
+
+/* === אנימציות === */
+
+/* פעימה כחולה לשלבים רגילים */
+.level-btn.current-pulse {
+    animation: pulseBlue 1.5s infinite;
+}
+
+@keyframes pulseBlue {
+    0% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(0, 198, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0); }
+}
+
+/* פעימה מוזהבת לשלב האחרון */
+@keyframes goldPulse {
+    0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+    100% { transform: scale(1.05); box-shadow: 0 0 40px rgba(255, 215, 0, 0.9); }
 }
 
 
 /* =========================
-   תיקון עיצוב המשחק (הגריד שנשבר)
+   שאר המשחק (גריד וקלפים)
 ========================= */
 
 .game-grid {
@@ -256,35 +234,19 @@ body {
     perspective: 1000px;
     margin-bottom: 50px;
     
-    /* מרכוז הגריד */
     justify-content: center;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* הגדרות מדויקות לכל שלב כדי שלא יקרסו */
-.grid-level-1 {
-    grid-template-columns: repeat(2, 110px);
-}
+.grid-level-1 { grid-template-columns: repeat(2, 110px); }
+.grid-level-2 { grid-template-columns: repeat(4, 90px); }
+.grid-level-3 { grid-template-columns: repeat(4, 90px); }
+.grid-level-4 { grid-template-columns: repeat(5, 80px); }
 
-.grid-level-2 {
-    grid-template-columns: repeat(4, 90px); /* 4 עמודות * 3 שורות = 12 */
-}
-
-.grid-level-3 {
-    grid-template-columns: repeat(4, 90px); /* 4 עמודות * 4 שורות = 16 */
-}
-
-.grid-level-4 {
-    grid-template-columns: repeat(5, 80px); /* 5 עמודות * 4 שורות = 20 */
-}
-
-/* עיצוב כרטיס המשחק */
 .card {
-    /* מוודא שהכרטיס ריבוע גם אם הגריד נשבר */
     width: 100%; 
     aspect-ratio: 1 / 1; 
-    
     position: relative;
     cursor: pointer;
     border-radius: 15px;
@@ -336,14 +298,13 @@ body {
     opacity: 0.5;
 }
 
-/* זוהר לזוג תואם */
 .card.matched .card-inner {
     box-shadow: 0 0 20px #4effef, 0 0 40px rgba(78, 255, 239, 0.6);
     border: 2px solid #4effef;
 }
 
 /* =========================
-   מודל סיום (חלונות קופצים)
+   מודל סיום
 ========================= */
 .modal {
     position: fixed;
@@ -401,13 +362,71 @@ body {
 /* רספונסיביות */
 @media (max-width: 600px) {
     .level-menu { padding: 30px; }
-    .level-btn:nth-child(odd) { margin-right: 40px; }
-    .level-btn:nth-child(even) { margin-left: 40px; }
-    
-    .level-btn:nth-child(odd)::before { transform: translateX(-50%) rotate(25deg) translateZ(-50px); }
-    .level-btn:nth-child(even)::before { transform: translateX(-50%) rotate(-25deg) translateZ(-50px); }
-    
+    .levels-grid { gap: 15px; }
+    .level-btn { width: 80px; height: 80px; font-size: 1rem; }
     .game-grid { gap: 8px; }
     .grid-level-4 { grid-template-columns: repeat(5, 60px); }
     .card-back { font-size: 2rem; }
+}
+
+/* ===========================================
+   תוספת רספונסיבית - להוסיף בסוף הקובץ
+=========================================== */
+@media (max-width: 600px) {
+    .game-title {
+        font-size: 1.8rem;
+    }
+
+    .game-header {
+        padding: 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* נתוני משחק (זמן, נקודות) */
+    .stats-panel {
+        padding: 10px 15px;
+        gap: 15px;
+        width: 95%;
+        justify-content: space-around;
+    }
+
+    .stat-box .value {
+        font-size: 1.2rem;
+    }
+
+    /* === כיווץ לוח המשחק === */
+    .game-grid {
+        gap: 8px; /* רווחים קטנים יותר */
+        margin-bottom: 20px;
+    }
+
+    /* הגדרות מיוחדות לכל שלב כדי שייכנס במסך צר */
+    .grid-level-1 { grid-template-columns: repeat(2, 80px); }
+    .grid-level-2 { grid-template-columns: repeat(4, 65px); } /* 4 בשורה, אבל קטנים */
+    .grid-level-3 { grid-template-columns: repeat(4, 65px); }
+    .grid-level-4 { grid-template-columns: repeat(5, 55px); } /* 5 בשורה, ממש קטנים */
+
+    /* הקטנת הקלפים עצמם */
+    .card {
+        border-radius: 8px;
+    }
+    
+    .card-front, .card-back {
+        border-radius: 8px;
+    }
+
+    .card-back { font-size: 1.8rem; } /* אייקון קטן יותר */
+    .card-front::after { font-size: 1.5rem; } /* סימן שאלה קטן יותר */
+    
+    /* תפריט בחירת שלבים */
+    .levels-grid {
+        gap: 15px;
+    }
+    .level-btn {
+        width: 80px;
+        height: 80px;
+    }
+    .level-text { font-size: 1rem; }
+    .level-icon { font-size: 1.2rem; }
 }

@@ -20,6 +20,13 @@
     </header>
 
     <main class="lb-main">
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="showLeaderboard('all', this)">🏆 כללי</button>
+            <button class="filter-btn" onclick="showLeaderboard('memory', this)">🧠 זיכרון</button>
+            <button class="filter-btn" onclick="showLeaderboard('catcher', this)">⭐ כוכבים</button>
+        </div>
+
         <div class="table-container">
             <table class="ranking-table">
                 <thead>

@@ -51,13 +51,50 @@ document.addEventListener("DOMContentLoaded", () => {
             const btn = document.createElement("button");
             btn.classList.add("level-btn");
             
+            const isLastLevel = level.id === levels.length;
+
             if (level.id <= maxLevel) {
+                // === שלב פתוח ===
                 btn.classList.add("unlocked");
-                btn.innerHTML = `שלב ${level.id} <span>▶️</span>`;
+                
+                // אם זה השלב האחרון - שים כתר, אחרת משולש
+                let icon = isLastLevel ? "👑" : "▶️";
+                
+                // הוספת מחלקה מיוחדת אם זה השלב האחרון
+                if (isLastLevel) {
+                    btn.classList.add("final-level-unlocked");
+                }
+
+                // הבהוב לשלב הנוכחי (הגבוה ביותר שפתוח)
+                if (level.id === maxLevel) {
+                    btn.classList.add("current-pulse");
+                }
+
+                btn.innerHTML = `
+                   <span class="level-text">שלב ${level.id}</span>
+                   <span class="level-icon">${icon}</span>
+                `;
+                
                 btn.onclick = () => startGame(level);
+
             } else {
+                // === שלב נעול ===
                 btn.classList.add("locked");
-                btn.innerHTML = `שלב ${level.id} <span class="lock-icon">🔒</span>`;
+                
+                if (isLastLevel) {
+                    // עיצוב מיוחד לשלב האחרון כשהוא נעול ("המטרה")
+                    btn.classList.add("final-level-locked");
+                    btn.innerHTML = `
+                        <span class="level-text">שלב ${level.id}</span>
+                        <span class="level-icon">⚜️</span> 
+                    `;
+                } else {
+                    // סתם שלב נעול רגיל
+                    btn.innerHTML = `
+                        <span class="level-text">שלב ${level.id}</span>
+                        <span class="level-icon">🔒</span>
+                    `;
+                }
             }
 
             levelsGrid.appendChild(btn);
@@ -141,16 +178,13 @@ document.addEventListener("DOMContentLoaded", () => {
         matches++;
         updateScore(10 * currentLevelConfig.id);
 
-        // הוספת קלאס matched כדי להפעיל את הזוהר
         firstCard.classList.add("matched");
         secondCard.classList.add("matched");
 
         firstCard = null;
         secondCard = null;
 
-        // בדיקת ניצחון עם דיליי
         if (matches === currentLevelConfig.pairs) {
-            // === התיקון כאן: השהייה של שניה לפני הצגת הניצחון ===
             setTimeout(() => {
                 endLevel();
             }, 1000);
@@ -214,6 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         if (index !== -1) {
             users[index].score = (users[index].score || 0) + points;
+            users[index].memoryScore = (users[index].memoryScore || 0) + points;
             localStorage.setItem("users", JSON.stringify(users));
         }
     }

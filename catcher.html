@@ -2,6 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>תפוס את הכוכב ⭐</title>
     
     <link rel="stylesheet" href="css/catcher.css">
@@ -13,7 +14,7 @@
 <body>
 
 <header class="top-bar">
-    <a href="dashboard.html" class="back-btn">⬅ חזרה לתפריט הראשי</a>
+    <a href="dashboard.html" class="back-btn">⬅ חזרה לתפריט</a>
 </header>
 
 <h1 class="title">⭐ תפוס את הכוכב ⭐</h1>
@@ -47,14 +48,16 @@
     </div>
 </div>
 
-<div id="gameOver" class="game-over hidden">
-    <h2 id="gameOverTitle">❌ המשחק נגמר</h2>
-    <p id="gameOverMessage">לא הצלחת לתפוס מספיק כוכבים</p>
-    
-    <div class="modal-buttons">
-        <button id="nextLevelBtn" class="hidden">לשלב הבא ⏭️</button>
-        <button id="retryBtn">🔄 נסה שוב</button>
-        <button id="menuBtn">לתפריט השלבים</button>
+<div id="gameCompleteModal" class="modal hidden">
+    <div class="modal-content">
+        <h2 id="modalTitle">🎉 כל הכבוד! 🎉</h2>
+        <p id="modalMessage">סיימת את השלב בהצלחה!</p>
+        
+        <div class="modal-buttons">
+            <button id="nextLevelBtn" class="btn">לשלב הבא ⏭️</button>
+            <button id="retryBtn" class="btn secondary">נסה שוב 🔄</button>
+            <button id="menuBtn" class="btn secondary">לתפריט השלבים 🏠</button>
+        </div>
     </div>
 </div>
 

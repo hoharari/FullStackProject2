@@ -28,7 +28,7 @@
 }
 
 /* =========================
-   PROFILE PANEL
+   PROFILE PANEL (דסקטופ)
 ========================= */
 
 .user-panel {
@@ -74,6 +74,7 @@
     display: none;
     box-shadow: 0 20px 45px rgba(0,0,0,0.6);
     animation: fadeSlide 0.35s ease forwards;
+    right: 0; /* יישור לימין בדסקטופ */
 }
 
 /* פתוח */
@@ -118,7 +119,7 @@
 .games-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    grid-auto-rows: 240px; /* הגדלתי קצת את הגובה כדי שהתמונות יכנסו יפה */
+    grid-auto-rows: 240px;
     gap: 25px;
     margin-top: 40px;
 }
@@ -131,7 +132,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* התוכן מתחיל מלמעלה */
+    justify-content: flex-start;
     padding: 15px;
     gap: 10px;
     font-size: 1.1rem;
@@ -139,11 +140,10 @@
     color: white;
     text-decoration: none;
     backdrop-filter: blur(6px);
-    overflow: hidden; /* כדי שהתמונה לא תצא מהגבולות */
+    overflow: hidden;
     transition: transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
 }
 
-/* Hover על הכרטיס */
 .game-card:hover {
     transform: translateY(-8px) scale(1.03);
     background: rgba(255, 255, 255, 0.25);
@@ -153,21 +153,19 @@
 /* === עיצוב תמונות בתוך הכרטיס === */
 .game-card img {
     width: 100%;
-    height: 150px; /* גובה אחיד לכל התמונות */
-    object-fit: cover; /* חיתוך יפה של התמונה */
+    height: 150px;
+    object-fit: cover;
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     transition: transform 0.4s ease;
 }
 
-/* אפקט זום לתמונה בהובר */
 .game-card:hover img {
     transform: scale(1.05);
 }
 
-/* כותרת המשחק מתחת לתמונה */
 .game-card p {
-    margin-top: auto; /* דוחף את הטקסט למטה */
+    margin-top: auto;
     margin-bottom: 5px;
     font-size: 1.1rem;
     font-weight: 700;
@@ -176,59 +174,99 @@
 }
 
 /* === מצבים מיוחדים === */
-
-/* משחקים לא פעילים (בפיתוח) */
 .disabled {
-    opacity: 0.8; /* שקיפות קלה בלבד - נשאר צבעוני! */
+    opacity: 0.8;
     cursor: not-allowed;
-    pointer-events: none; /* מונע לחיצה */
-    /* הסרנו את ה-grayscale כדי שיהיה צבעוני */
+    pointer-events: none;
 }
 
-/* גדלים מיוחדים בגריד */
-.game-card.tall {
-    grid-row: span 2;
-}
+.game-card.tall { grid-row: span 2; }
+.game-card.wide { grid-column: span 2; }
+.game-card.big { grid-column: span 2; grid-row: span 2; }
 
-.game-card.wide {
-    grid-column: span 2;
-}
-
-.game-card.big {
-    grid-column: span 2;
-    grid-row: span 2;
-}
-
-/* התאמת התמונה לכרטיס הגדול */
 .game-card.big img {
     height: 100%; 
-    max-height: 320px; /* גובה מקסימלי לכרטיס גדול */
+    max-height: 320px;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
-
+/* ===========================================
+   תיקון רספונסיבי למובייל (Fixed)
+=========================================== */
 @media (max-width: 768px) {
+    
+    .dashboard {
+        padding: 15px;
+    }
+
     .dash-title {
-        font-size: 2.4rem;
+        font-size: 2.2rem;
+        margin-top: 60px; /* מפנה מקום לכפתור הפרופיל */
     }
 
-    .choose-game {
-        font-size: 1.6rem;
+    /* === 1. תיקון כפתור ופאנל פרופיל (למרכז) === */
+    .profile-toggle {
+        top: 20px;
+        left: 20px;
+        right: auto; /* מבטל הצמדה לימין */
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        z-index: 2002;
     }
 
+    /* הפאנל עצמו - ממורכז למסך */
     .user-panel {
-        right: 15px;
-        top: 80px;
+        position: fixed;
+        top: 70px; /* מתחת לכפתור */
+        left: 50%; /* אמצע המסך */
+        transform: translateX(-50%); /* איזון לאמצע */
+        right: auto; /* איפוס */
+        width: 100%; 
+        max-width: 320px; /* רוחב מקסימלי יפה */
+        display: flex;
+        justify-content: center;
+        z-index: 2001;
     }
-    
+
+    /* עיצוב הקופסה במובייל */
+    .profile-content {
+        position: relative; /* יחסי ל-user-panel */
+        width: 100%;
+        margin: 0;
+        right: auto;
+        background: rgba(20, 10, 40, 0.98); /* רקע כהה אטום */
+        border: 1px solid rgba(255,255,255,0.3);
+        box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+        text-align: center;
+    }
+
+    /* === 2. תיקון גריד המשחקים === */
     .games-container {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        grid-auto-rows: 200px;
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 2 משחקים בשורה */
+        gap: 15px;
+        margin-top: 20px;
+        grid-auto-rows: auto; /* גובה אוטומטי לפי התוכן */
     }
-    
-    .game-card img {
-        height: 110px;
+
+    /* עיצוב הכרטיס במובייל - כמו המקורי */
+    .game-card, .game-card.wide, .game-card.big, .game-card.tall {
+        grid-column: span 1; /* כולם בגודל אחיד */
+        grid-row: span 1;
+        width: 100%;
+        min-height: 180px; /* גובה מינימלי יפה */
+        padding: 10px;
+    }
+
+    /* התמונות - החזרתי לגודל סביר שלא ייראה מעוך */
+    .game-card img, .game-card.big img {
+        height: 110px; /* גובה טוב לתמונה במובייל */
+        max-height: 110px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .game-card p {
+        font-size: 1rem;
+        margin-top: 8px;
     }
 }
