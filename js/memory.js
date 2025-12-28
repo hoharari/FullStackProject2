@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     btn.classList.add("final-level-locked");
                     btn.innerHTML = `
                         <span class="level-text">שלב ${level.id}</span>
-                        <span class="level-icon">⚜️</span> 
+                        <span class="level-icon">👑</span> 
                     `;
                 } else {
                     // סתם שלב נעול רגיל
