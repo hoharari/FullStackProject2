@@ -12,7 +12,7 @@ body {
 /* עיצוב HEADER ו-FOOTER מיובא מ-global.css */
 
 /* כותרת העמוד */
-.auth-title {
+.registration-title {
     text-align: center;
     font-size: 2.2rem;
     font-weight: 700;
@@ -21,7 +21,7 @@ body {
 }
 
 /* מיכל הטופס */
-.auth-container {
+.registration-container {
     width: 100%;
     max-width: 450px;
     margin: 90px auto; /* מרווח מלמעלה בדסקטופ */
@@ -33,7 +33,7 @@ body {
 }
 
 /* טופס */
-.auth-form {
+.registration-form {
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -43,7 +43,7 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-.auth-form label {
+.registration-form label {
     font-size: 1.1rem;
     font-weight: 600;
     display: flex;
@@ -51,7 +51,7 @@ body {
     gap: 8px;
 }
 
-.auth-form input {
+.registration-form input {
     width: 100%;
     padding: 14px;
     border-radius: 12px;
@@ -61,14 +61,14 @@ body {
     font-family: 'IBM Plex Sans Hebrew', sans-serif;
 }
 
-.auth-form input:focus {
+.registration-form input:focus {
     outline: none;
     border-color: #ff00cc;
     box-shadow: 0 0 10px rgba(255, 0, 204, 0.4);
 }
 
 /* כפתורים */
-.auth-btn {
+.registration-btn {
     background: linear-gradient(to right, #ff00cc, #b100ff);
     color: white;
     border: none;
@@ -82,7 +82,7 @@ body {
     box-shadow: 0 5px 15px rgba(177, 0, 255, 0.4);
 }
 
-.auth-btn:hover {
+.registration-btn:hover {
     transform: scale(1.02);
     background: linear-gradient(to right, #ff33d4, #c44dff);
 }
@@ -105,31 +105,31 @@ body {
 }
 
 /* ===========================================
-   תיקון רספונסיבי למובייל (auth.css)
+   תיקון רספונסיבי למובייל 
 =========================================== */
 @media (max-width: 600px) {
-    .auth-container {
+    .registration-container {
         margin: 20px auto; /* פחות רווח מלמעלה */
         width: 95%;
         padding: 15px;
     }
 
-    .auth-title {
+    .registration-title {
         font-size: 1.8rem;
         margin-bottom: 15px;
     }
 
-    .auth-form {
+    .registration-form {
         padding: 20px;
         gap: 15px;
     }
 
-    .auth-form input {
+    .registration-form input {
         padding: 12px;
         font-size: 16px; /* מונע זום אוטומטי באייפון */
     }
 
-    .auth-btn {
+    .registration-btn {
         font-size: 1.2rem;
         padding: 12px;
     }

@@ -8,7 +8,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .hidden { display: none !important; }
@@ -35,7 +35,7 @@ body {
 .title {
     font-size: 2.3rem;
     margin: 5px 0;
-    font-family: 'Geom', sans-serif;
+    font-family: 'Huninn', sans-serif;
     color: #004488;
     text-shadow: 0 2px 0px #fff;
 }
@@ -66,7 +66,7 @@ body {
 }
 
 .level-menu h2 {
-    font-family: 'Geom', sans-serif;
+    font-family: 'Huninn', sans-serif;
     font-size: 2.2rem;
     margin-bottom: 30px;
     color: #0055aa;
@@ -75,6 +75,7 @@ body {
 
 .levels-grid {
     display: flex;
+    font-family: 'IBM Plex Sans Hebrew', sans-serif;
     flex-direction: row; /* מסדר בשורה */
     justify-content: center;
     flex-wrap: wrap;

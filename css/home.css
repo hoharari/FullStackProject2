@@ -19,9 +19,9 @@
     font-family: "Bitcount Prop Single", system-ui;
     font-variation-settings: "slnt" 0, "CRSV" 0.5, "ELSH" 0, "ELXP" 0;
     font-size: 4rem;
-    color: #ffffff; /* שינוי לשחור ללבן! */
+    color: #ffffff; 
     margin-bottom: 15px;
-    text-shadow: 0 0 20px rgba(189, 0, 255, 0.8), 4px 4px 0px #4b0066; /* זוהר ניאון + צל */
+    text-shadow: 0 0 20px rgba(189, 0, 255, 0.8), 4px 4px 0px #4b0066; 
     letter-spacing: 2px;
     line-height: 1.2;
 }
@@ -83,7 +83,6 @@
     padding: 60px 20px 100px;
     text-align: center;
     color: #ffffff;
-    background: rgba(0, 0, 0, 0.2); /* רקע כהה עדין להפרדה */
 }
 
 .video-showcase h2 {
@@ -116,6 +115,43 @@
     height: 100%;
 }
 
+.podcast {
+    padding: 80px 20px;
+    text-align: center;
+    color: white;
+    margin-top: 0;
+}
+
+.podcast h3 {
+    font-family: 'Geom', sans-serif;
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    text-shadow: 0 0 15px rgba(255, 0, 204, 0.6); /* זוהר ורוד תואם ללוגו */
+}
+
+/* קונטיינר לטקסט ולנגן כדי שיהיה מרוכז ויפה */
+.podcast p {
+    font-family: 'IBM Plex Sans Hebrew', sans-serif;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    max-width: 700px;
+    margin: 0 auto 20px; /* מירכוז */
+    color: #e0e0e0;
+    opacity: 0.95;
+}
+
+/* עיצוב נגן האודיו */
+.podcast-player {
+    width: 100%;
+    max-width: 600px;
+    height: 55px;
+    margin: 30px auto 0;
+    display: block;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
+    outline: none;
+}
 /* ===========================================
    תיקון רספונסיבי למובייל (index.html)
 =========================================== */

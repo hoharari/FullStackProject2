@@ -43,7 +43,7 @@ body {
 }
 
 .game-title {
-    font-family: 'Geom', sans-serif;
+    font-family: 'Bitcount Prop Single', sans-serif;
     font-size: 2.2rem;
     text-shadow: 0 0 15px rgba(169, 88, 255, 0.6);
 }
@@ -117,7 +117,7 @@ body {
 }
 
 .level-menu h2 {
-    font-family: 'Geom', sans-serif;
+    font-family: 'IBM Plex Sans Hebrew', sans-serif;
     font-size: 2.2rem;
     margin-bottom: 30px;
     text-shadow: 0 0 15px #bd00ff;
@@ -143,7 +143,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-family: 'Geom', sans-serif;
+    font-family: 'IBM Plex Sans Hebrew', sans-serif;
     position: relative;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transform: none !important;
@@ -369,9 +369,6 @@ body {
     .card-back { font-size: 2rem; }
 }
 
-/* ===========================================
-   תוספת רספונסיבית - להוסיף בסוף הקובץ
-=========================================== */
 @media (max-width: 600px) {
     .game-title {
         font-size: 1.8rem;

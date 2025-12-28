@@ -1,14 +1,27 @@
-/**
- * קובץ: js/login.js
- * תיאור: מנהל את תהליך ההתחברות.
- * כולל אימות מול Local Storage, בדיקת חסימות (Security) וניהול Session.
- */
+document.addEventListener("DOMContentLoaded", () => {
+    // בודק אם יש פרמטר email בכתובת ה-URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const emailFromSignup = urlParams.get('email');
+    
+    if (emailFromSignup) {
+        // ממלא את השדה
+        document.getElementById("loginEmail").value = emailFromSignup;
+        // שם את הפוקוס על שדה הסיסמה (כי המייל כבר מלא)
+        document.getElementById("loginPassword").focus();
+    }
+});
 
 document.getElementById("loginForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
     let email = document.getElementById("loginEmail").value;
     let pass = document.getElementById("loginPassword").value;
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+        alert("כתובת האימייל אינה תקינה! ❌\nנא להזין כתובת כמו: example@mail.com");
+        return;
+    }
 
     let users = JSON.parse(localStorage.getItem("users")) || [];
     // חיפוש המשתמש לפי מייל בלבד בהתחלה
